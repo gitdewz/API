@@ -6,7 +6,7 @@ def main():
     print(str(ticket))
     print(ticket.toJson())
     print()
-    
+
     project = Project("Newgirra")
     print(str(project))
     print(project.toJson())
