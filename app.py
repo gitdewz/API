@@ -13,12 +13,12 @@ collectionFunctions = CollectionFunctions()
 
 @app.route("/api/ticket/<project>/<ticketId>", methods=['get'])
 def getTicket(project=None, ticketId=None):
-    if project is not None and ticketId is not None:
+    if ticketId.isdigit():
         data = {"id": int(ticketId) }
         ticket = Ticket(project, data)
         return dumps(vars(ticket))
     else:
-        return "Error: Invalid request path"
+        return dumps({"Error": "Invalid request path. TicketID must be an integer."})
 
 
 if __name__ == '__main__':
