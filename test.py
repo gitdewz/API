@@ -2,7 +2,8 @@ from Models.TicketModel import Ticket
 from Models.ProjectModel import Project
 
 def main():
-    ticket = Ticket("Enhancement", "TEST")
+    ticket_data = {"category":"Enhancement", "project":"TEST"}
+    ticket = Ticket(ticket_data)
     print(str(ticket))
     print(ticket.toJson())
     print()

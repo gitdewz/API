@@ -2,6 +2,7 @@ from Controllers.CollectionController import CollectionController
 
 class ApiBaseModel:
     def __init__(self):
+        self.isNew = True
         collectionController = CollectionController()
         if not collectionController.doesCollectionExist(self):
             self.id = 1
@@ -11,6 +12,9 @@ class ApiBaseModel:
     def toJson(self):
         return vars(self)
 
-    def insert(self):
+    def save(self):
         collectionController = CollectionController()
-        collectionController.insert(self)
+        if self.isNew:
+            collectionController.insert(self)
+        else:
+            collectionController.update(self)

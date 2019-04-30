@@ -1,77 +1,28 @@
-from flask import Flask, jsonify, render_template, redirect, request, session, url_for
+from bson.json_util import dumps
+from flask import Flask
+from Controllers.CollectionController import CollectionController
+from Models.TicketModel import Ticket
 import os
-from string import Template
-from create import Create
-from load import Load
-import pymongo
 
-app = Flask(__name__, static_folder="../client", template_folder="../client/html")
+app = Flask(__name__)
 
 # Make the WSGI interface available at the top level so wfastcgi can get it.
 wsgi_app = app.wsgi_app
 
+collectionController = CollectionController()
 
-@app.route('/')
-@app.route('/start/')
-@app.route('/start/<user>')
-def start(user=None): 
-    return render_template('start.html', user=user)
-
-@app.route('/register/')
-def register(user=None): 
-    return render_template('confirmation.html', user=user)
-
-@app.route('/dashboard/')
-def dashboard(): 
-    print(session.get('email'))
-    return render_template('dashboard.html')
-
-@app.route('/project/<project>')
-def project(user=None): 
-    return render_template('project.html', user=user)
-
-
-@app.route('/tasks/')
-@app.route('/tasks/<task>')
-def tasks(user=None, task=None):
-    load = Load("task", task)
-    if task != None:
-        return load.load_task()        
-    return render_template('tasks.html', user=user)
-
-@app.route('/login', methods=['post'])
-def login():
-    print(request.form['email'])
-    print(request.form['password'])
-    session['email'] = request.form['email']
-    session['authenticated'] = True
-    return redirect(url_for(".dashboard"))
- 
-
-@app.route('/api/create/<item_type>', methods=['post'])
-def create(user=None, item_type=None):
-    print(item_type)
-    create = Create(item_type, request.form)
-    create.create_item()       
-    return redirect(url_for('tasks'))
-
-@app.route('/api/<item_type>/<item_key>', methods=['get'])
-def load(item_type=None, item_key=None):
-    mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
-    db = mongo_client["tracker"]
-    item_type = item_type
-    item_collection = db[item_type]
-    item = item_collection.find_one({'key': item_key})
-    data = {
-        "key": item['key'],
-        "project": item['project'],
-        "short_description": item['short_description'],
-        "notes": item['notes'],
-    }
-    return jsonify(data)
-
-
-
+@app.route("/api/ticket/<project>/<ticketId>", methods=['get'])
+def getTicket(project=None, ticketId=None):
+    if project is not None and ticketId is not None:
+        id = int(ticketId)
+        project = project
+        data = {"id": id, "project": project}
+        ticket = Ticket(data)
+        mongoData = collectionController.findItem(ticket)
+        bsonData = dumps(mongoData)
+        return bsonData
+    else:
+        return "Error: Invalid request path"
 
 
 if __name__ == '__main__':

@@ -5,7 +5,6 @@ class Project(ApiBaseModel):
         ApiBaseModel.__init__(self)
         self.name = name
         self.tickets = []
-        self.insert()
 
     def __str__(self):
         return self.name
