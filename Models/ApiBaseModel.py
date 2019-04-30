@@ -1,26 +1,26 @@
-from Controllers.CollectionController import CollectionController
+from Helpers.CollectionFunctions import CollectionFunctions
 
 class ApiBaseModel:
     def __init__(self):
         self.isNew = True
-        collectionController = CollectionController()
-        if not collectionController.doesCollectionExist(self):
+        collectionFunctions = CollectionFunctions()
+        if not collectionFunctions.doesCollectionExist(self):
             self.id = 1
         else:
-            self.id = collectionController.findMax(self, "id") + 1
+            self.id = collectionFunctions.findMax(self, "id") + 1
 
     def toJson(self):
         return vars(self)
 
     def loadAttributes(self):
-        collectionController = CollectionController()
-        document = collectionController.findItem(self)
+        collectionFunctions = CollectionFunctions()
+        document = collectionFunctions.findItem(self)
         for key in document:
             setattr(self, key, document[key])
 
     def save(self):
-        collectionController = CollectionController()
+        collectionFunctions = CollectionFunctions()
         if self.isNew:
-            collectionController.insert(self)
+            collectionFunctions.insert(self)
         else:
-            collectionController.update(self)
+            collectionFunctions.update(self)

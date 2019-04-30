@@ -1,6 +1,6 @@
 import pymongo
 
-class CollectionController:
+class CollectionFunctions:
     def __init__(self):
         mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
         self.db = mongo_client["test"]

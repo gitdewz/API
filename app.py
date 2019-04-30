@@ -1,6 +1,6 @@
 from bson.json_util import dumps
 from flask import Flask
-from Controllers.CollectionController import CollectionController
+from Helpers.CollectionFunctions import CollectionFunctions
 from Models.TicketModel import Ticket
 import os
 
@@ -9,13 +9,13 @@ app = Flask(__name__)
 # Make the WSGI interface available at the top level so wfastcgi can get it.
 wsgi_app = app.wsgi_app
 
-collectionController = CollectionController()
+collectionFunctions = CollectionFunctions()
 
 @app.route("/api/ticket/<project>/<ticketId>", methods=['get'])
 def getTicket(project=None, ticketId=None):
     if project is not None and ticketId is not None:
         data = {"id": int(ticketId) }
-        ticket = Ticket(project, data)  
+        ticket = Ticket(project, data)
         return dumps(vars(ticket))
     else:
         return "Error: Invalid request path"
