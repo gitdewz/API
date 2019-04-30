@@ -14,13 +14,9 @@ collectionController = CollectionController()
 @app.route("/api/ticket/<project>/<ticketId>", methods=['get'])
 def getTicket(project=None, ticketId=None):
     if project is not None and ticketId is not None:
-        id = int(ticketId)
-        project = project
-        data = {"id": id, "project": project}
-        ticket = Ticket(data)
-        mongoData = collectionController.findItem(ticket)
-        bsonData = dumps(mongoData)
-        return bsonData
+        data = {"id": int(ticketId) }
+        ticket = Ticket(project, data)  
+        return dumps(vars(ticket))
     else:
         return "Error: Invalid request path"
 

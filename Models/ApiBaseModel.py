@@ -12,6 +12,12 @@ class ApiBaseModel:
     def toJson(self):
         return vars(self)
 
+    def loadAttributes(self):
+        collectionController = CollectionController()
+        document = collectionController.findItem(self)
+        for key in document:
+            setattr(self, key, document[key])
+
     def save(self):
         collectionController = CollectionController()
         if self.isNew:
