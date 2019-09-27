@@ -7,12 +7,12 @@ from Models.TicketModel import Ticket
 collectionFunctions = CollectionFunctions()
 
 class TicketRequests(Resource):
-    def get(self, project, ticketId):
+    def get(self, projectName, ticketId):
         # TODO
         # 1. Authenticated requests
         if (True):  # authentication
             data = {"id": int(ticketId)}
-            ticket = Ticket(project, data)
+            ticket = Ticket(projectName, data)
             response = Response(
                 response=dumps(vars(ticket)),
                 status=200,

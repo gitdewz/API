@@ -6,6 +6,7 @@ from Helpers.CollectionFunctions import CollectionFunctions
 from Models.TicketModel import Ticket
 from Models.UserModel import User
 import Endpoints.LoginRequests as LoginRequests
+import Endpoints.ProjectRequests as ProjectRequests
 import Endpoints.TicketRequests as TicketRequests
 import os
 import secrets
@@ -27,7 +28,10 @@ api.add_resource(LoginRequests.RegistrationRequests, "/register")
 api.add_resource(LoginRequests.LoginRequests, "/login")
 
 # Ticket Requests
-api.add_resource(TicketRequests.TicketRequests, "/ticket/<string:project>/<int:ticketId>")
+api.add_resource(TicketRequests.TicketRequests, "/ticket/<string:projectName>/<int:ticketId>")
+
+# Project Requests
+api.add_resource(ProjectRequests.ProjectRequests, "/project/<string:projectName>")
 
 
 if __name__ == "__main__":

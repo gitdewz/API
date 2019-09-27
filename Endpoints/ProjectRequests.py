@@ -6,27 +6,14 @@ from Models.ProjectModel import Project
 
 collectionFunctions = CollectionFunctions()
 
-# Project is required
-        self.project = project
-        self.id = data.get("id", None)        
-        if self.id is None:
-            # New item, give it the next available ID
-            ApiBaseModel.__init__(self)
-        else:
-            # Passed in the ID, item must already exist
-            self.isNew = False
-            self.loadAttributes()
-        self.category = data.get("category", getattr(self, "category", None))
-
 class ProjectRequests(Resource):
-    def get(self, project):
+    def get(self, projectName):
         # TODO
         # 1. Authenticated requests
         if (True):  # authentication
-            data = {"name": int(ticketId)}
-            project = Project(project, data)
+            project = Project(projectName)
             response = Response(
-                response=dumps(vars(ticket)),
+                response=dumps(vars(project)),
                 status=200,
             )
             return response
