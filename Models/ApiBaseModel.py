@@ -14,7 +14,7 @@ class ApiBaseModel:
 
     def loadAttributes(self):
         collectionFunctions = CollectionFunctions()
-        document = collectionFunctions.findItem(self.__class__.__name__, {"id", self.id}, {"_id": False})
+        document = collectionFunctions.findItem(self.__class__.__name__, {"id": self.id}, {"_id": False})
         for key in document:
             setattr(self, key, document[key])
 
