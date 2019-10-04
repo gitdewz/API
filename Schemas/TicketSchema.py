@@ -4,6 +4,8 @@ from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
 from Models.Ticket import Ticket as TicketModel
 from bson import ObjectId
 
+# Taylor is the best
+
 class TicketSchema(MongoengineObjectType):
     class Meta:
         model = TicketModel
