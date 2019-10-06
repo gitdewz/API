@@ -3,6 +3,11 @@ from graphene.relay import Node
 from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
 from Models.Ticket import Ticket as TicketModel
 from bson import ObjectId
+from Helpers.CollectionFunctions import CollectionFunctions
+
+# TODO - recreate collection functions a better way,
+# probably don't need them all with graphql
+collectionFunctions = CollectionFunctions()
 
 # Taylor is the best
 
@@ -15,12 +20,23 @@ class CreateTicket(graphene.Mutation):
     ticket = graphene.Field(TicketSchema)
 
     class Arguments:
-        ticket_number = graphene.Int(required=True)
         project_name = graphene.String(required=True)
+        description = graphene.String(required=False)
+        priority = graphene.String(required=False)
+        sprint_id = graphene.Int(required=False)
+        story_points = graphene.Int(required=False)
+        ticket_type = graphene.String(required=False)
 
-    def mutate(self, info, ticket_number, project_name):
+
+    def mutate(self, info, project_name, description, priority, sprint_id, story_points, ticket_type):
+        ticket_number=collectionFunctions.findMax("Ticket", "ticket_number") + 1
+        print(ticket_number)
         ticket = TicketModel(id=ObjectId(), ticket_number=ticket_number, project_name=project_name)
-        print(ticket.ticket_id)
+        ticket.description = description
+        ticket.priority = priority
+        ticket.sprint_id = sprint_id
+        ticket.story_points = story_points
+        ticket.ticket_type = ticket_type
         ticket.save()
         return CreateTicket(ticket)
 

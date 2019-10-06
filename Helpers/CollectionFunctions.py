@@ -4,14 +4,19 @@ import pymongo
 class CollectionFunctions:
     def __init__(self):
         mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
-        self.db = mongo_client["test"]
+
+        # TODO - create global db name const
+        self.db = mongo_client["mongoengine"]
 
     def doesCollectionExist(self, item):
         collection = self.db[item.__class__.__name__]
         return collection.count() > 0
 
-    def findMax(self, item, field):
-        collection = self.db[item.__class__.__name__]
+    # TODO
+    # 1. Create findMax function that takes in multiple fields
+    #    this will allow findMax by project name and ticket number
+    def findMax(self, collectionName, field):
+        collection = self.db[collectionName]
         return collection.find_one(sort=[(field, -1)])[field]
 
     def findMongoID(self, item):
