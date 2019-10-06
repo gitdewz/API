@@ -12,7 +12,7 @@ import Endpoints.TicketRequests as TicketRequests
 import os
 import secrets
 from flask_graphql import GraphQLView
-from Schemas.TicketSchema import schema
+from Schemas.Schema import schema
 from mongoengine import connect
 # import jwt  # JSON Web Tokens
 

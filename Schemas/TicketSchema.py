@@ -20,7 +20,6 @@ class CreateTicket(graphene.Mutation):
 
     def mutate(self, info, ticket_number, project_name):
         ticket = TicketModel(id=ObjectId(), ticket_number=ticket_number, project_name=project_name)
-        #ticket.id = f"{ticket.project_name}{ticket.ticket_id}"
         print(ticket.ticket_id)
         ticket.save()
         return CreateTicket(ticket)
@@ -59,14 +58,3 @@ class DeleteTicket(graphene.Mutation):
         print(ticket.ticket_id)
         ticket.delete()
         return DeleteTicket(success=True)
-
-class Query(graphene.ObjectType):
-    tickets = MongoengineConnectionField(TicketSchema)
-
-class Mutation(graphene.ObjectType):
-    create_ticket = CreateTicket.Field()
-    update_ticket = UpdateTicket.Field()
-    delete_ticket = DeleteTicket.Field()
-
-schema = graphene.Schema(query=Query, types=[TicketSchema], mutation=Mutation)
-# getTickets = graphene.Schema(query=Query, types=[TicketSchema])

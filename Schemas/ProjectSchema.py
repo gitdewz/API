@@ -13,12 +13,10 @@ class CreateProject(graphene.Mutation):
     project = graphene.Field(ProjectSchema)
 
     class Arguments:
-        project_number = graphene.Int(required=True)
         project_name = graphene.String(required=True)
 
-    def mutate(self, info, project_number, project_name):
-        project = ProjectModel(id=ObjectId(), project_number=project_number, project_name=project_name)
-        #project.id = f"{project.project_name}{project.project_id}"
+    def mutate(self, info, project_name):
+        project = ProjectModel(id=ObjectId(), project_name=project_name)
         print(project.project_id)
         project.save()
         return CreateProject(project)
@@ -57,14 +55,3 @@ class DeleteProject(graphene.Mutation):
         print(project.project_id)
         project.delete()
         return DeleteProject(success=True)
-
-class Query(graphene.ObjectType):
-    projects = MongoengineConnectionField(ProjectSchema)
-
-class Mutation(graphene.ObjectType):
-    create_project = CreateProject.Field()
-    update_project = UpdateProject.Field()
-    delete_project = DeleteProject.Field()
-
-schema = graphene.Schema(query=Query, types=[ProjectSchema], mutation=Mutation)
-# getProjects = graphene.Schema(query=Query, types=[ProjectSchema])
