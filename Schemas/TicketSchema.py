@@ -60,7 +60,6 @@ class UpdateTicket(graphene.Mutation):
         ticket = TicketModel(**dict(ticket.items()))
         if ("project_name" in changes.keys()):
             ticket_number = collectionFunctions.findNextId("Ticket", {"project_name": changes["project_name"]}, "ticket_number")
-            print(ticket_number)
             changes["ticket_number"] = ticket_number
         for k, v in changes.items():
             ticket[k] = v

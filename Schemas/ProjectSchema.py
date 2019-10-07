@@ -17,7 +17,6 @@ class CreateProject(graphene.Mutation):
 
     def mutate(self, info, project_name):
         project = ProjectModel(id=ObjectId(), project_name=project_name)
-        print(project.project_id)
         project.save()
         return CreateProject(project)
 
@@ -52,6 +51,5 @@ class DeleteProject(graphene.Mutation):
 
     def mutate(self, info, project_id):
         project = ProjectModel(project_id=project_id)
-        print(project.project_id)
         project.delete()
         return DeleteProject(success=True)

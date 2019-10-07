@@ -34,7 +34,6 @@ class CollectionFunctions:
         return collection.find_one(entryFilter, attributeFilter)
 
     def findUser(self, credentials):
-        print(credentials)
         collection = self.db["User"]
         return collection.find_one({"username": credentials["username"], "password": credentials["password"]}, {"_id": False, "password": False})
 
@@ -43,8 +42,6 @@ class CollectionFunctions:
 
     def insert(self, item):
         collection = self.db[item.__class__.__name__]
-        print(collection.name)
-        print(item.toJson())
         collection.insert(item.toJson())
 
     def update(self, item):
