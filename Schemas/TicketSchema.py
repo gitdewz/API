@@ -29,9 +29,7 @@ class CreateTicket(graphene.Mutation):
 
 
     def mutate(self, info, project_name, description, priority, sprint_id, story_points, ticket_type):
-        ticket_number = 1
-        if collectionFunctions.doesCollectionExist(self):
-            collectionFunctions.findMax("Ticket", "ticket_number") + 1
+        ticket_number = collectionFunctions.findNextId("Ticket", {"project_name": project_name}, "ticket_number")
         ticket = TicketModel(id=ObjectId(), ticket_number=ticket_number, project_name=project_name)
         ticket.description = description
         ticket.priority = priority
@@ -42,7 +40,9 @@ class CreateTicket(graphene.Mutation):
         return CreateTicket(ticket)
 
 class TicketInput(graphene.InputObjectType):
+    ticket_id = graphene.String(required=False)
     project_name = graphene.String(required=False)
+    ticket_number = graphene.Int(required=False)
     sprint_id = graphene.Int(required=False)
     ticket_type = graphene.String(required=False)
     priority = graphene.String(required=False)
@@ -53,16 +53,19 @@ class UpdateTicket(graphene.Mutation):
     ticket = graphene.Field(TicketSchema)
 
     class Arguments:
-        ticket_id = graphene.ID(required=True)
         changes = TicketInput(required=True)
+        ticket = TicketInput(required=True)
 
-    def mutate(self, info, ticket_id, changes):
-        ticket = TicketModel(id=ticket_id)
+    def mutate(self, info, ticket, changes):
+        ticket = TicketModel(**dict(ticket.items()))
+        if ("project_name" in changes.keys()):
+            ticket_number = collectionFunctions.findNextId("Ticket", {"project_name": changes["project_name"]}, "ticket_number")
+            print(ticket_number)
+            changes["ticket_number"] = ticket_number
         for k, v in changes.items():
             ticket[k] = v
         ticket.update(**dict(changes.items()))
         return UpdateTicket(ticket)
-
 
 class DeleteTicket(graphene.Mutation):
     success = graphene.Boolean()
@@ -72,6 +75,5 @@ class DeleteTicket(graphene.Mutation):
 
     def mutate(self, info, ticket_id):
         ticket = TicketModel(ticket_id=ticket_id)
-        print(ticket.ticket_id)
         ticket.delete()
         return DeleteTicket(success=True)

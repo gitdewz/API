@@ -8,16 +8,22 @@ class CollectionFunctions:
         # TODO - create global db name const
         self.db = mongo_client["mongoengine"]
 
-    def doesCollectionExist(self, item):
-        collection = self.db[item.__class__.__name__]
-        return collection.count() > 0
+    def doesCollectionExist(self, collectionName, whereClause):
+        collection = self.db[collectionName]
+        return collection.find(whereClause).count() > 0
 
     # TODO
     # 1. Create findMax function that takes in multiple fields
     #    this will allow findMax by project name and ticket number
-    def findMax(self, collectionName, field):
+    def findMax(self, collectionName, whereClause, field):
         collection = self.db[collectionName]
-        return collection.find_one(sort=[(field, -1)])[field]
+        return collection.find_one(whereClause, sort=[(field, -1)])[field]
+
+    def findNextId(self, collectionName, whereClause, field):
+        nextId = 1
+        if self.doesCollectionExist(collectionName, whereClause):
+            nextId = self.findMax(collectionName, whereClause, field) + 1
+        return nextId
 
     def findMongoID(self, item):
         collection = self.db[item.__class__.__name__]
