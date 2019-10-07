@@ -4,7 +4,7 @@
         * Virtual environment documentation: https://docs.python.org/3/tutorial/venv.html
         * Check your python version in the terminal `python -V`, if it isn't 3.7.X try `python3 -V`
         * Use `python -m venv env` or `python3 -m venv env` to create the virtual environment
-            * If you name your enviornment directory something other than `env` update the gitignore
+            * *If you name your enviornment directory something other than `env` update the gitignore*
         * **Windows** -
             * Use `env\Scripts\activate.bat` to start the environment
             * Use `env\Scripts\deactivate.bat` to stop the environment
