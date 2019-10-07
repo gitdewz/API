@@ -13,7 +13,15 @@
             * Use  `source tutorial-env/bin/deactivate` to stop the environment
         * Install the Python modules using `python -m pip install -r requirements.txt`
 
-2. **Start the app**
+2. **Install and run mongoDB if you don't already have it setup**
+    * **Windows** -
+        * Setup documentation: https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-windows/
+    * **MacOS** -
+        * Setup documentation: https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-os-x/
+    * **Linux** -
+        * Setup documentation: https://docs.mongodb.com/v3.2/administration/install-on-linux/
+
+3. **Start the app**
     * If the virtual environment isn't already active use the commands above to activate it
     * In the project base directory run `python app.py`
     * The API should be available at `http://localhost:5556/graphql`
