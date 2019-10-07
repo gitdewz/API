@@ -29,8 +29,9 @@ class CreateTicket(graphene.Mutation):
 
 
     def mutate(self, info, project_name, description, priority, sprint_id, story_points, ticket_type):
-        ticket_number=collectionFunctions.findMax("Ticket", "ticket_number") + 1
-        print(ticket_number)
+        ticket_number = 1
+        if collectionFunctions.doesCollectionExist(self):
+            collectionFunctions.findMax("Ticket", "ticket_number") + 1
         ticket = TicketModel(id=ObjectId(), ticket_number=ticket_number, project_name=project_name)
         ticket.description = description
         ticket.priority = priority
