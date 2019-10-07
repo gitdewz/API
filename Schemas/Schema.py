@@ -5,12 +5,14 @@ from Schemas.TicketSchema import CreateTicket, DeleteTicket, UpdateTicket, Ticke
 from Schemas.ProjectSchema import CreateProject, DeleteProject, UpdateProject, ProjectSchema
 from bson import ObjectId
 
+
 class Query(graphene.ObjectType):
     # Project Query
     projects = MongoengineConnectionField(ProjectSchema)
-    
+
     # Ticket Query
     tickets = MongoengineConnectionField(TicketSchema)
+
 
 class Mutation(graphene.ObjectType):
     # Project Mutations
@@ -23,4 +25,6 @@ class Mutation(graphene.ObjectType):
     delete_ticket = DeleteTicket.Field()
     update_ticket = UpdateTicket.Field()
 
-schema = graphene.Schema(query=Query, types=[ProjectSchema, TicketSchema], mutation=Mutation)
+
+schema = graphene.Schema(
+    query=Query, types=[ProjectSchema, TicketSchema], mutation=Mutation)
