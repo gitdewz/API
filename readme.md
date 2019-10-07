@@ -1,4 +1,3 @@
-**Setup:**
 1. **Setup Python 3.7.X, a virtual environment, and the modules**
     * Link to download Python: https://www.python.org/downloads/
     * Create a virtual environment in the project base directory
