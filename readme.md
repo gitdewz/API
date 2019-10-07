@@ -1,5 +1,5 @@
-Setup:
-**1. Setup Python 3.7.X, a virtual environment, and the modules**
+**Setup:**
+1. **Setup Python 3.7.X, a virtual environment, and the modules**
     * Link to download Python: https://www.python.org/downloads/
     * Create a virtual environment in the project base directory
         * Virtual environment documentation: https://docs.python.org/3/tutorial/venv.html
@@ -14,7 +14,7 @@ Setup:
             * Use  `source tutorial-env/bin/deactivate` to stop the environment
         * Install the Python modules using `python -m pip install -r requirements.txt`
 
-**2. Start the app**
+2. **Start the app**
     * If the virtual environment isn't already active use the commands above to activate it
     * In the project base directory run `python app.py`
     * The API should be available at `http://localhost:5556/graphql`
