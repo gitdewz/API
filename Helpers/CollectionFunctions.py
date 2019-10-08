@@ -51,3 +51,8 @@ class CollectionFunctions:
         # data = {k: v for k, v in vars(item) if v is not None}
         collection.find_one_and_update(
             {"_id": self.findMongoID(item)}, {"$set": vars(item)})
+
+    def authenticate(self, session):
+        session = self.findItem("session", {"sessionID": session}, None)
+        print(session)
+        return session and session["authenticated"]
