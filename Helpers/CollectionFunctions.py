@@ -1,5 +1,8 @@
 import pymongo
 
+# TODO
+# 1. Create constants for db / collections
+
 
 class CollectionFunctions:
     def __init__(self):
@@ -33,9 +36,12 @@ class CollectionFunctions:
         collection = self.db[collectionName]
         return collection.find_one(entryFilter, attributeFilter)
 
-    def findUser(self, credentials):
+    def findUser(self, email, password):
         collection = self.db["User"]
-        return collection.find_one({"username": credentials["username"], "password": credentials["password"]}, {"_id": False, "password": False})
+        return collection.find({"email": email, "password": password})
+
+    def validateLogin(self, email, password):
+        return self.findUser(email, password).count() == 1
 
     def doesItemExist(self, collectionName, key, value):
         return self.db[collectionName].count({key: value}) > 0

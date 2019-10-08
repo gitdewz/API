@@ -4,6 +4,7 @@ from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
 from Models.User import User as UserModel
 from bson import ObjectId
 from Helpers.CollectionFunctions import CollectionFunctions
+import uuid
 
 # TODO - recreate collection functions a better way,
 # probably don't need them all with graphql
@@ -32,6 +33,21 @@ class CreateUser(graphene.Mutation):
                          first_name=first_name, last_name=last_name)
         user.save()
         return CreateUser(user)
+
+
+class LoginUser(graphene.Mutation):
+    token = graphene.UUID()
+    error = graphene.String()
+
+    class Arguments:
+        email = graphene.String(required=True)
+        password = graphene.String(required=True)
+
+    def mutate(self, info, email, password):
+        if collectionFunctions.validateLogin(email, password):
+            # TODO - is random UUID the best? look at other options
+            return LoginUser(token=uuid.uuid4().hex)
+        return LoginUser(error="Invalid Login")
 
 
 class UserInput(graphene.InputObjectType):

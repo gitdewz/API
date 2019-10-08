@@ -3,7 +3,7 @@ from graphene.relay import Node
 from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
 from Schemas.ProjectSchema import CreateProject, DeleteProject, UpdateProject, ProjectSchema
 from Schemas.TicketSchema import CreateTicket, DeleteTicket, UpdateTicket, TicketSchema
-from Schemas.UserSchema import CreateUser, DeleteUser, UpdateUser, UserSchema
+from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, UserSchema
 from bson import ObjectId
 
 
@@ -29,6 +29,7 @@ class Mutation(graphene.ObjectType):
     # User Mutations
     create_user = CreateUser.Field()
     delete_user = DeleteUser.Field()
+    login_user = LoginUser.Field()
     update_user = UpdateUser.Field()
 
 
