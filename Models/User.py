@@ -8,4 +8,4 @@ class User(Document):
     email = EmailField()
     password = StringField()
     first_name = StringField()
-    last_name = IntField()
+    last_name = StringField()
