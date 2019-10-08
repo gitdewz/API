@@ -8,6 +8,7 @@ import os
 import secrets
 from flask_graphql import GraphQLView
 from Schemas.Schema import schema
+from Schemas.LoginSchema import login_schema
 from mongoengine import connect
 # import jwt  # JSON Web Tokens
 
@@ -22,11 +23,17 @@ if __name__ == "__main__":
     # Make the WSGI interface available at the top level so wfastcgi can get it.
     wsgi_app = app.wsgi_app
 
+    def graphql_login():
+        # TODO - graphiql should probably be false
+        return GraphQLView.as_view("login", schema=login_schema, graphiql=True)
+
+    app.add_url_rule("/login", view_func=graphql_login())
+
     def auth_required(fn):
         def wrapper(*args, **kwargs):
             # TODO - remove hardcoded default session header 12345
-            session = request.headers.get("AUTH_HEADER", "12345")
-            if collectionFunctions.authenticate(session):
+            token = request.headers.get("AUTHTOKEN", "")
+            if collectionFunctions.authenticate(token):
                 return fn(*args, **kwargs)
             return "not authenticated"
         return wrapper
@@ -35,7 +42,8 @@ if __name__ == "__main__":
         view = GraphQLView.as_view("graphql", schema=schema, graphiql=True)
         return auth_required(view)
 
-    app.add_url_rule("/graphql", view_func=graphql_view(), methods=["GET", "POST"])
+    app.add_url_rule("/graphql", view_func=graphql_view(),
+                     methods=["GET", "POST"])
 
     HOST = os.environ.get("SERVER_HOST", "localhost")
     mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -43,7 +51,8 @@ if __name__ == "__main__":
 
     try:
         PORT = int(os.environ.get("SERVER_PORT", "5556"))
-        connect("mongoengine", host="mongodb://localhost:27017/", alias="default")
+        connect("mongoengine", host="mongodb://localhost:27017/",
+                alias="default")
     except ValueError:
         PORT = 5556
     app.secret_key = os.urandom(12)

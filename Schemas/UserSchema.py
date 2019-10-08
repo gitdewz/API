@@ -44,9 +44,14 @@ class LoginUser(graphene.Mutation):
         password = graphene.String(required=True)
 
     def mutate(self, info, email, password):
-        if collectionFunctions.validateLogin(email, password):
+        user = collectionFunctions.findUser(email, password)
+        if user:
             # TODO - is random UUID the best? look at other options
-            return LoginUser(token=uuid.uuid4().hex)
+            sessionID = uuid.uuid4().hex
+            # TODO - why do I have to use _id.. user_id should work
+            collectionFunctions.insert(
+                "session", {"sessionID": sessionID, "userID": user["_id"], "authenticated": True})
+            return LoginUser(token=sessionID)
         return LoginUser(error="Invalid Login")
 
 

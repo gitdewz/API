@@ -38,17 +38,18 @@ class CollectionFunctions:
 
     def findUser(self, email, password):
         collection = self.db["User"]
-        return collection.find({"email": email, "password": password})
+        return collection.find_one({"email": email, "password": password})
 
     def validateLogin(self, email, password):
-        return self.findUser(email, password).count() == 1
+        collection = self.db["User"]
+        return collection.find({"email": email, "password": password}).count() == 1
 
     def doesItemExist(self, collectionName, key, value):
         return self.db[collectionName].count({key: value}) > 0
 
-    def insert(self, item):
-        collection = self.db[item.__class__.__name__]
-        collection.insert(item.toJson())
+    def insert(self, collectionName, item):
+        collection = self.db[collectionName]
+        collection.insert(item)
 
     def update(self, item):
         collection = self.db[item.__class__.__name__]
@@ -58,7 +59,8 @@ class CollectionFunctions:
         collection.find_one_and_update(
             {"_id": self.findMongoID(item)}, {"$set": vars(item)})
 
-    def authenticate(self, session):
-        session = self.findItem("session", {"sessionID": session}, None)
+    def authenticate(self, token):
+        session = self.findItem(
+            "session", {"sessionID": token.replace("-", "")}, None)
         print(session)
         return session and session["authenticated"]
