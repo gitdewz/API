@@ -17,6 +17,9 @@ if __name__ == "__main__":
 
     app = Flask(__name__)
 
+    # TODO - config test/prod environments
+    app.config["DEV"] = True
+
     # TODO - figure out how to handle cors correctly ... might've changed with graphql
     CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -40,6 +43,8 @@ if __name__ == "__main__":
 
     def graphql_view():
         view = GraphQLView.as_view("graphql", schema=schema, graphiql=True)
+        if (app.config["DEV"]):
+            return view
         return auth_required(view)
 
     app.add_url_rule("/graphql", view_func=graphql_view(),
@@ -56,4 +61,4 @@ if __name__ == "__main__":
     except ValueError:
         PORT = 5556
     app.secret_key = os.urandom(12)
-    app.run(HOST, PORT)
+    app.run(HOST, PORT, debug=True)

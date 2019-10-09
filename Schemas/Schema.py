@@ -1,6 +1,8 @@
 import graphene
 from graphene.relay import Node
 from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
+from Models.Project import Project as ProjectModel
+from Models.Ticket import Ticket as TicketModel
 from Schemas.ProjectSchema import CreateProject, DeleteProject, UpdateProject, ProjectSchema
 from Schemas.TicketSchema import CreateTicket, DeleteTicket, UpdateTicket, TicketSchema
 from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, UserSchema
@@ -8,11 +10,21 @@ from bson import ObjectId
 
 
 class Query(graphene.ObjectType):
-    # Project Query
-    projects = MongoengineConnectionField(ProjectSchema)
+    # Project Queries
+    projects = MongoengineConnectionField(TicketSchema)
 
-    # Ticket Query
+    all_projects = graphene.List(ProjectSchema)
+
+    def resolve_all_projects(self, info):
+        return list(ProjectModel.objects().all())
+
+    # Ticket Queries
     tickets = MongoengineConnectionField(TicketSchema)
+
+    all_tickets = graphene.List(TicketSchema)
+
+    def resolve_all_tickets(self, info):
+        return list(TicketModel.objects().all())
 
 
 class Mutation(graphene.ObjectType):

@@ -1,24 +1,29 @@
 import graphene
 from graphene.relay import Node
-from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
+from graphene_mongo import MongoengineObjectType
 from Models.Project import Project as ProjectModel
 from bson import ObjectId
+
 
 class ProjectSchema(MongoengineObjectType):
     class Meta:
         model = ProjectModel
         interfaces = (Node,)
 
+
 class CreateProject(graphene.Mutation):
     project = graphene.Field(ProjectSchema)
 
     class Arguments:
         project_name = graphene.String(required=True)
+        description = graphene.String(required=False)
 
-    def mutate(self, info, project_name):
-        project = ProjectModel(id=ObjectId(), project_name=project_name)
+    def mutate(self, info, project_name, description):
+        project = ProjectModel(
+            id=ObjectId(), project_name=project_name, description=description)
         project.save()
         return CreateProject(project)
+
 
 class ProjectInput(graphene.InputObjectType):
     project_name = graphene.String(required=False)
@@ -27,6 +32,7 @@ class ProjectInput(graphene.InputObjectType):
     priority = graphene.String(required=False)
     story_points = graphene.Int(required=False)
     description = graphene.String(required=False)
+
 
 class UpdateProject(graphene.Mutation):
     project = graphene.Field(ProjectSchema)

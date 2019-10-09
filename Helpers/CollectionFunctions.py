@@ -60,6 +60,7 @@ class CollectionFunctions:
             {"_id": self.findMongoID(item)}, {"$set": vars(item)})
 
     def authenticate(self, token):
+        print(token)
         session = self.findItem(
             "session", {"sessionID": token.replace("-", "")}, None)
         print(session)
