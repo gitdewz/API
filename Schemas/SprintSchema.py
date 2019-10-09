@@ -17,8 +17,8 @@ class CreateSprint(graphene.Mutation):
     class Arguments:
         sprint_name = graphene.String(required=True)
         goal = graphene.String(required=False)
-        date_start = graphene.Date(required=False)
-        date_end = graphene.Date(required=False)
+        date_start = graphene.DateTime(required=False)
+        date_end = graphene.DateTime(required=False)
 
     def mutate(self, info, sprint_name, goal, date_start, date_end):
         sprint = SprintModel(
@@ -28,21 +28,22 @@ class CreateSprint(graphene.Mutation):
 
 
 class SprintInput(graphene.InputObjectType):
+    sprint_id = graphene.ID(required=False)
     sprint_name = graphene.String(required=False)
     goal = graphene.String(required=False)
-    date_start = graphene.Date(required=False)
-    date_end = graphene.Date(required=False)
+    date_start = graphene.DateTime(required=False)
+    date_end = graphene.DateTime(required=False)
 
 
 class UpdateSprint(graphene.Mutation):
     sprint = graphene.Field(SprintSchema)
 
     class Arguments:
-        sprint_id = graphene.ID(required=True)
         changes = SprintInput(required=True)
+        sprint = SprintInput(required=True)
 
-    def mutate(self, info, sprint_id, changes):
-        sprint = SprintModel(id=sprint_id)
+    def mutate(self, info, sprint, changes):
+        sprint = SprintModel(**dict(sprint.items()))
         for k, v in changes.items():
             sprint[k] = v
         sprint.update(**dict(changes.items()))

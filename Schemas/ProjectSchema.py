@@ -38,11 +38,11 @@ class UpdateProject(graphene.Mutation):
     project = graphene.Field(ProjectSchema)
 
     class Arguments:
-        project_id = graphene.ID(required=True)
         changes = ProjectInput(required=True)
+        project = ProjectInput(required=True)
 
-    def mutate(self, info, project_id, changes):
-        project = ProjectModel(id=project_id)
+    def mutate(self, info, project, changes):
+        project = ProjectModel(**dict(project.items()))
         for k, v in changes.items():
             project[k] = v
         project.update(**dict(changes.items()))

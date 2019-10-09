@@ -1,5 +1,5 @@
 from mongoengine import Document
-from mongoengine.fields import DateField, ListField, ObjectIdField, StringField
+from mongoengine.fields import DateTimeField, ListField, ObjectIdField, StringField
 
 
 class Sprint(Document):
@@ -8,5 +8,5 @@ class Sprint(Document):
     sprint_name = StringField(unique=True)
     goal = StringField()
     tickets = ListField(default=[])
-    date_start = DateField()
-    date_end = DateField()
+    date_start = DateTimeField()
+    date_end = DateTimeField()

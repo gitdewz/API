@@ -1,5 +1,5 @@
 from mongoengine import Document
-from mongoengine.fields import DateField, ListField, ObjectIdField, StringField
+from mongoengine.fields import DateTimeField, ListField, ObjectIdField, StringField
 
 
 class Team(Document):
@@ -9,4 +9,4 @@ class Team(Document):
     members = ListField(default=[])
     projects = ListField(default=[])
     status = StringField()
-    date_created = DateField()
+    date_created = DateTimeField()

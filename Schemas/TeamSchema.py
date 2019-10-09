@@ -11,17 +11,25 @@ class TeamSchema(MongoengineObjectType):
         interfaces = (Node,)
 
 
+class UserType(graphene.InputObjectType):
+    user_id = graphene.ID(required=True)
+
+
+class ProjectType(graphene.InputObjectType):
+    project_id = graphene.ID(required=True)
+
+
 class CreateTeam(graphene.Mutation):
     team = graphene.Field(TeamSchema)
 
     class Arguments:
         team_name = graphene.String(required=True)
-        members = graphene.String(required=False)
-        projects = graphene.Date(required=False)
+        members = graphene.List(required=False, of_type=UserType)
+        projects = graphene.List(required=False, of_type=ProjectType)
         status = graphene.String(required=False)
-        date_created = graphene.Date(required=False)
+        date_created = graphene.DateTime(required=False)
 
-    def mutate(self, info, team_name, members, projects, status, date_created):
+    def mutate(self, info, team_name, members=[], projects=[], status=None, date_created=None):
         team = TeamModel(
             id=ObjectId(), team_name=team_name, members=members, projects=projects, status=status, date_created=date_created)
         team.save()
@@ -29,22 +37,23 @@ class CreateTeam(graphene.Mutation):
 
 
 class TeamInput(graphene.InputObjectType):
+    team_id = graphene.ID(required=False)
     team_name = graphene.String(required=False)
-    members = graphene.String(required=False)
-    projects = graphene.Date(required=False)
+    members = graphene.List(required=False, of_type=UserType)
+    projects = graphene.List(required=False, of_type=ProjectType)
     status = graphene.String(required=False)
-    date_created = graphene.Date(required=False)
+    date_created = graphene.DateTime(required=False)
 
 
 class UpdateTeam(graphene.Mutation):
     team = graphene.Field(TeamSchema)
 
     class Arguments:
-        team_id = graphene.ID(required=True)
         changes = TeamInput(required=True)
+        team = TeamInput(required=True)
 
-    def mutate(self, info, team_id, changes):
-        team = TeamModel(id=team_id)
+    def mutate(self, info, team, changes):
+        team = TeamModel(**dict(team.items()))
         for k, v in changes.items():
             team[k] = v
         team.update(**dict(changes.items()))
