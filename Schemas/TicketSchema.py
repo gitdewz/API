@@ -11,10 +11,12 @@ collectionFunctions = CollectionFunctions()
 
 # Taylor is the best
 
+
 class TicketSchema(MongoengineObjectType):
     class Meta:
         model = TicketModel
         interfaces = (Node,)
+
 
 class CreateTicket(graphene.Mutation):
     ticket = graphene.Field(TicketSchema)
@@ -27,10 +29,11 @@ class CreateTicket(graphene.Mutation):
         story_points = graphene.Int(required=False)
         ticket_type = graphene.String(required=False)
 
-
     def mutate(self, info, project_name, description, priority, sprint_id, story_points, ticket_type):
-        ticket_number = collectionFunctions.findNextId("Ticket", {"project_name": project_name}, "ticket_number")
-        ticket = TicketModel(id=ObjectId(), ticket_number=ticket_number, project_name=project_name)
+        ticket_number = collectionFunctions.findNextId(
+            "Ticket", {"project_name": project_name}, "ticket_number")
+        ticket = TicketModel(
+            id=ObjectId(), ticket_number=ticket_number, project_name=project_name)
         ticket.description = description
         ticket.priority = priority
         ticket.sprint_id = sprint_id
@@ -38,6 +41,7 @@ class CreateTicket(graphene.Mutation):
         ticket.ticket_type = ticket_type
         ticket.save()
         return CreateTicket(ticket)
+
 
 class TicketInput(graphene.InputObjectType):
     ticket_id = graphene.String(required=False)
@@ -49,6 +53,7 @@ class TicketInput(graphene.InputObjectType):
     story_points = graphene.Int(required=False)
     description = graphene.String(required=False)
 
+
 class UpdateTicket(graphene.Mutation):
     ticket = graphene.Field(TicketSchema)
 
@@ -59,12 +64,14 @@ class UpdateTicket(graphene.Mutation):
     def mutate(self, info, ticket, changes):
         ticket = TicketModel(**dict(ticket.items()))
         if ("project_name" in changes.keys()):
-            ticket_number = collectionFunctions.findNextId("Ticket", {"project_name": changes["project_name"]}, "ticket_number")
+            ticket_number = collectionFunctions.findNextId(
+                "Ticket", {"project_name": changes["project_name"]}, "ticket_number")
             changes["ticket_number"] = ticket_number
         for k, v in changes.items():
             ticket[k] = v
         ticket.update(**dict(changes.items()))
         return UpdateTicket(ticket)
+
 
 class DeleteTicket(graphene.Mutation):
     success = graphene.Boolean()
