@@ -20,7 +20,7 @@ class CreateSprint(graphene.Mutation):
         date_start = graphene.DateTime(required=False)
         date_end = graphene.DateTime(required=False)
 
-    def mutate(self, info, sprint_name, goal, date_start, date_end):
+    def mutate(self, info, sprint_name, goal=None, date_start=None, date_end=None):
         sprint = SprintModel(
             id=ObjectId(), sprint_name=sprint_name, goal=goal, date_start=date_start, date_end=date_end)
         sprint.save()

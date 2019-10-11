@@ -21,6 +21,8 @@ class UserSchema(MongoengineObjectType):
 
 class CreateUser(graphene.Mutation):
     user = graphene.Field(UserSchema)
+    token = graphene.String()
+    error = graphene.String()
 
     class Arguments:
         email = graphene.String(required=True)
@@ -30,9 +32,16 @@ class CreateUser(graphene.Mutation):
 
     def mutate(self, info, email, password, first_name, last_name):
         user = UserModel(id=ObjectId(), email=email, password=password,
-                         first_name=first_name, last_name=last_name)
+                        first_name=first_name, last_name=last_name)
         user.save()
-        return CreateUser(user)
+        user_data = collectionFunctions.findUser(email, password)
+        # TODO - is random UUID the best? look at other options
+        token = uuid.uuid4().hex
+        # TODO - why do I have to use _id.. user_id should work
+        collectionFunctions.insert(
+            "session", {"sessionID": token, "userID": user_data["_id"], "authenticated": True})
+        return CreateUser(user=user, token=token)
+
 
 
 class LoginUser(graphene.Mutation):

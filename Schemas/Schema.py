@@ -5,6 +5,7 @@ from Models.Project import Project as ProjectModel
 from Models.Sprint import Sprint as SprintModel
 from Models.Team import Team as TeamModel
 from Models.Ticket import Ticket as TicketModel
+from Models.User import User as UserModel
 from Schemas.ProjectSchema import CreateProject, DeleteProject, UpdateProject, ProjectSchema
 from Schemas.SprintSchema import CreateSprint, DeleteSprint, UpdateSprint, SprintSchema
 from Schemas.TeamSchema import CreateTeam, DeleteTeam, UpdateTeam, TeamSchema
@@ -45,6 +46,15 @@ class Query(graphene.ObjectType):
 
     def resolve_all_tickets(self, info):
         return list(TicketModel.objects().all())
+
+    # User Queries
+    # TODO - make a seperate user table without password
+    users = MongoengineConnectionField(UserSchema)
+
+    all_users = graphene.List(UserSchema)
+
+    def resolve_all_users(self, info):
+        return list(UserModel.objects().all())
 
 
 class Mutation(graphene.ObjectType):
