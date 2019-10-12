@@ -2,6 +2,7 @@ import graphene
 from graphene.relay import Node
 from graphene_mongo import MongoengineObjectType
 from Models.Project import Project as ProjectModel
+from Schemas.Types.TicketType import TicketType
 from bson import ObjectId
 
 
@@ -27,11 +28,10 @@ class CreateProject(graphene.Mutation):
 
 class ProjectInput(graphene.InputObjectType):
     project_name = graphene.String(required=False)
-    sprint_id = graphene.Int(required=False)
-    project_type = graphene.String(required=False)
-    priority = graphene.String(required=False)
-    story_points = graphene.Int(required=False)
+    project_id = graphene.ID(required=False)
+    team_id = graphene.ID(required=False)
     description = graphene.String(required=False)
+    tickets = graphene.List(required=False, of_type=TicketType)
 
 
 class UpdateProject(graphene.Mutation):

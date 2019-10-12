@@ -25,3 +25,13 @@
     * If the virtual environment isn't already active use the commands above to activate it
     * In the project base directory run `python app.py`
     * The API should be available at `http://localhost:5556/graphql`
+
+
+Pylint:
+1. Install Python for VSCode
+2. Enable pylint
+3. pip install pylint-mongoengine
+4. Add the following to .vscode/settings.json
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_mongoengine"
+    ],

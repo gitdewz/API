@@ -6,5 +6,6 @@ class Project(Document):
     meta = {"collection": "Project"}
     project_id = ObjectIdField(primary_key=True)
     project_name = StringField(unique=True)
+    team_id = ObjectIdField()
     description = StringField()
     tickets = ListField(default=[])

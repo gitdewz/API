@@ -2,6 +2,8 @@ import graphene
 from graphene.relay import Node
 from graphene_mongo import MongoengineObjectType
 from Models.Team import Team as TeamModel
+from Schemas.Types.ProjectType import ProjectType
+from Schemas.Types.UserType import UserType
 from bson import ObjectId
 
 
@@ -9,14 +11,6 @@ class TeamSchema(MongoengineObjectType):
     class Meta:
         model = TeamModel
         interfaces = (Node,)
-
-
-class UserType(graphene.InputObjectType):
-    user_id = graphene.ID(required=True)
-
-
-class ProjectType(graphene.InputObjectType):
-    project_id = graphene.ID(required=True)
 
 
 class CreateTeam(graphene.Mutation):
