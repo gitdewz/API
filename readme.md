@@ -27,7 +27,7 @@
     * The API should be available at `http://localhost:5556/graphql`
 
 
-Pylint:
+**Pylint -**
 1. Install Python for VSCode
 2. Enable pylint
 3. pip install pylint-mongoengine
