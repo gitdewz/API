@@ -31,7 +31,7 @@ class ProjectInput(graphene.InputObjectType):
     project_id = graphene.ID(required=False)
     team_id = graphene.ID(required=False)
     description = graphene.String(required=False)
-    tickets = graphene.List(required=False, of_type=TicketType)
+    tickets = graphene.List(required=False, of_type=graphene.ID)
 
 
 class UpdateProject(graphene.Mutation):

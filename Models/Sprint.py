@@ -7,6 +7,6 @@ class Sprint(Document):
     sprint_id = ObjectIdField(primary_key=True)
     sprint_name = StringField(unique=True)
     goal = StringField()
-    tickets = ListField(default=[])
+    tickets = ListField(field=ObjectIdField(), default=[])
     date_start = DateTimeField()
     date_end = DateTimeField()

@@ -2,8 +2,6 @@ import graphene
 from graphene.relay import Node
 from graphene_mongo import MongoengineObjectType
 from Models.Team import Team as TeamModel
-from Schemas.Types.ProjectType import ProjectType
-from Schemas.Types.UserType import UserType
 from bson import ObjectId
 
 
@@ -18,12 +16,13 @@ class CreateTeam(graphene.Mutation):
 
     class Arguments:
         team_name = graphene.String(required=True)
-        members = graphene.List(required=False, of_type=UserType)
-        projects = graphene.List(required=False, of_type=ProjectType)
+        members = graphene.List(required=False, of_type=graphene.ID)
+        projects = graphene.List(required=False, of_type=graphene.ID)
         status = graphene.String(required=False)
         date_created = graphene.DateTime(required=False)
 
     def mutate(self, info, team_name, members=[], projects=[], status=None, date_created=None):
+        print(projects)
         team = TeamModel(
             id=ObjectId(), team_name=team_name, members=members, projects=projects, status=status, date_created=date_created)
         team.save()
@@ -33,8 +32,8 @@ class CreateTeam(graphene.Mutation):
 class TeamInput(graphene.InputObjectType):
     team_id = graphene.ID(required=False)
     team_name = graphene.String(required=False)
-    members = graphene.List(required=False, of_type=UserType)
-    projects = graphene.List(required=False, of_type=ProjectType)
+    members = graphene.List(required=False, of_type=graphene.ID)
+    projects = graphene.List(required=False, of_type=graphene.ID)
     status = graphene.String(required=False)
     date_created = graphene.DateTime(required=False)
 

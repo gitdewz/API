@@ -34,7 +34,7 @@ class SprintInput(graphene.InputObjectType):
     goal = graphene.String(required=False)
     date_start = graphene.DateTime(required=False)
     date_end = graphene.DateTime(required=False)
-    tickets = graphene.List(required=False, of_type=TicketType)
+    tickets = graphene.List(required=False, of_type=graphene.ID)
 
 
 class UpdateSprint(graphene.Mutation):

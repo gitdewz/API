@@ -16,7 +16,7 @@ from bson import ObjectId
 
 class Query(graphene.ObjectType):
     # Project Queries
-    projects = MongoengineConnectionField(TicketSchema)
+    projects = MongoengineConnectionField(ProjectSchema)
 
     all_projects = graphene.List(ProjectSchema)
 
