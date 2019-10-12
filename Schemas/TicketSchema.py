@@ -29,7 +29,7 @@ class CreateTicket(graphene.Mutation):
         story_points = graphene.Int(required=False)
         ticket_type = graphene.String(required=False)
 
-    def mutate(self, info, project_name, description, priority, sprint_id, story_points, ticket_type):
+    def mutate(self, info, project_name, description=None, priority=None, sprint_id=None, story_points=None, ticket_type=None):
         ticket_number = collectionFunctions.findNextId(
             "Ticket", {"project_name": project_name}, "ticket_number")
         ticket = TicketModel(

@@ -18,7 +18,7 @@ class CreateProject(graphene.Mutation):
         project_name = graphene.String(required=True)
         description = graphene.String(required=False)
 
-    def mutate(self, info, project_name, description):
+    def mutate(self, info, project_name, description=None):
         project = ProjectModel(
             id=ObjectId(), project_name=project_name, description=description)
         project.save()
