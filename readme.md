@@ -9,8 +9,8 @@
             * Use `env\Scripts\activate.bat` to start the environment
             * Use `env\Scripts\deactivate.bat` to stop the environment
         * **MacOS / Linux** -
-            * Use `source tutorial-env/bin/activate` to start the environment
-            * Use  `source tutorial-env/bin/deactivate` to stop the environment
+            * Use `source env/bin/activate` to start the environment
+            * Use  `source env/bin/deactivate` to stop the environment
         * Install the Python modules using `python -m pip install -r requirements.txt`
 
 2. **Install and run mongoDB if you don't already have it setup**
