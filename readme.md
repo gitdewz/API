@@ -32,6 +32,6 @@ Pylint:
 2. Enable pylint
 3. pip install pylint-mongoengine
 4. Add the following to .vscode/settings.json
-    "python.linting.pylintArgs": [
-        "--load-plugins=pylint_mongoengine"
-    ],
+    "python.linting.pylintArgs": [<br/>
+      "--load-plugins=pylint_mongoengine"<br/>
+    ],<br/>
