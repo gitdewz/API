@@ -21,8 +21,11 @@
     * **Linux** -
         * Setup documentation: https://docs.mongodb.com/v3.2/administration/install-on-linux/
 
-3. **Start the app**
+4. **Start the app**
     * If the virtual environment isn't already active use the commands above to activate it
+    * *Optional*
+        * If you want to populate the database run `python create_collections.py` in the base directory
+        * If you want to clear out the database run `python delete_collections.py` in the base directory
     * In the project base directory run `python app.py`
     * The API should be available at `http://localhost:5556/graphql`
 
