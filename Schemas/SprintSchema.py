@@ -40,14 +40,14 @@ class UpdateSprint(graphene.Mutation):
 
     class Arguments:
         changes = SprintInput(required=True)
-        sprint = SprintInput(required=True)
+        sprint_id = graphene.ID(required=True)
 
-    def mutate(self, info, sprint, changes):
-        sprint = SprintModel(**dict(sprint.items()))
+    def mutate(self, info, sprint_id, changes):
+        sprint = UserModel.objects.get(sprint_id=ObjectId(sprint_id))
         for k, v in changes.items():
             sprint[k] = v
         sprint.update(**dict(changes.items()))
-        return UpdateSprint(sprint)
+        return UpdateTicket(sprint)
 
 
 class DeleteSprint(graphene.Mutation):

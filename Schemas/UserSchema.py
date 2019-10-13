@@ -32,7 +32,7 @@ class CreateUser(graphene.Mutation):
 
     def mutate(self, info, email, password, first_name, last_name):
         user = UserModel(id=ObjectId(), email=email, password=password,
-                        first_name=first_name, last_name=last_name)
+                         first_name=first_name, last_name=last_name)
         user.save()
         user_data = collectionFunctions.findUser(email, password)
         # TODO - is random UUID the best? look at other options
@@ -41,7 +41,6 @@ class CreateUser(graphene.Mutation):
         collectionFunctions.insert(
             "session", {"sessionID": token, "userID": user_data["_id"], "authenticated": True})
         return CreateUser(user=user, token=token)
-
 
 
 class LoginUser(graphene.Mutation):
@@ -77,14 +76,14 @@ class UpdateUser(graphene.Mutation):
 
     class Arguments:
         changes = UserInput(required=True)
-        user = UserInput(required=True)
+        user_id = graphene.ID(required=True)
 
-    def mutate(self, info, user, changes):
-        user = UserModel(**dict(user.items()))
+    def mutate(self, info, user_id, changes):
+        user = UserModel.objects.get(user_id=ObjectId(user_id))
         for k, v in changes.items():
             user[k] = v
         user.update(**dict(changes.items()))
-        return UpdateUser(user)
+        return UpdateTicket(user)
 
 
 class DeleteUser(graphene.Mutation):

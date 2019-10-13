@@ -38,14 +38,14 @@ class UpdateTeam(graphene.Mutation):
 
     class Arguments:
         changes = TeamInput(required=True)
-        team = TeamInput(required=True)
+        team_id = graphene.ID(required=True)
 
-    def mutate(self, info, team, changes):
-        team = TeamModel(**dict(team.items()))
+    def mutate(self, info, team_id, changes):
+        team = UserModel.objects.get(team_id=ObjectId(team_id))
         for k, v in changes.items():
             team[k] = v
         team.update(**dict(changes.items()))
-        return UpdateTeam(team)
+        return UpdateTicket(team)
 
 
 class DeleteTeam(graphene.Mutation):
