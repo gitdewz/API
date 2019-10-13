@@ -41,11 +41,11 @@ class UpdateProject(graphene.Mutation):
         project_id = graphene.ID(required=True)
 
     def mutate(self, info, project_id, changes):
-        project = UserModel.objects.get(project_id=ObjectId(project_id))
+        project = ProjectModel.objects.get(project_id=ObjectId(project_id))
         for k, v in changes.items():
             project[k] = v
         project.update(**dict(changes.items()))
-        return UpdateTicket(project)
+        return UpdateProject(project)
 
 
 class DeleteProject(graphene.Mutation):

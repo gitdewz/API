@@ -83,7 +83,7 @@ class UpdateUser(graphene.Mutation):
         for k, v in changes.items():
             user[k] = v
         user.update(**dict(changes.items()))
-        return UpdateTicket(user)
+        return UpdateUser(user)
 
 
 class DeleteUser(graphene.Mutation):
