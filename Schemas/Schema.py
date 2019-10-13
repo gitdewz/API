@@ -47,6 +47,12 @@ class Query(graphene.ObjectType):
     def resolve_all_tickets(self, info):
         return list(TicketModel.objects().all())
 
+    ticket = graphene.Field(
+        TicketSchema, project_name=graphene.String(), ticket_number=graphene.Int())
+
+    def resolve_ticket(self, info, project_name, ticket_number):
+        return TicketModel.objects.get(project_name__iexact=project_name, ticket_number=ticket_number)
+
     # User Queries
     # TODO - make a seperate user table without password
     users = MongoengineConnectionField(UserSchema)

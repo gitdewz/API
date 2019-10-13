@@ -16,15 +16,12 @@ class CreateTeam(graphene.Mutation):
 
     class Arguments:
         team_name = graphene.String(required=True)
-        members = graphene.List(required=False, of_type=graphene.ID)
-        projects = graphene.List(required=False, of_type=graphene.ID)
         status = graphene.String(required=False)
         date_created = graphene.DateTime(required=False)
 
-    def mutate(self, info, team_name, members=[], projects=[], status=None, date_created=None):
-        print(projects)
+    def mutate(self, info, team_name, status=None, date_created=None):
         team = TeamModel(
-            id=ObjectId(), team_name=team_name, members=members, projects=projects, status=status, date_created=date_created)
+            id=ObjectId(), team_name=team_name, status=status, date_created=date_created)
         team.save()
         return CreateTeam(team)
 
@@ -32,8 +29,6 @@ class CreateTeam(graphene.Mutation):
 class TeamInput(graphene.InputObjectType):
     team_id = graphene.ID(required=False)
     team_name = graphene.String(required=False)
-    members = graphene.List(required=False, of_type=graphene.ID)
-    projects = graphene.List(required=False, of_type=graphene.ID)
     status = graphene.String(required=False)
     date_created = graphene.DateTime(required=False)
 

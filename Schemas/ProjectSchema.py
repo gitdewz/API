@@ -16,11 +16,12 @@ class CreateProject(graphene.Mutation):
 
     class Arguments:
         project_name = graphene.String(required=True)
+        team_id = graphene.ID(required=False)
         description = graphene.String(required=False)
 
-    def mutate(self, info, project_name, description=None):
+    def mutate(self, info, project_name, team_id=None, description=None):
         project = ProjectModel(
-            id=ObjectId(), project_name=project_name, description=description)
+            id=ObjectId(), project_name=project_name, team_id=team_id, description=description)
         project.save()
         return CreateProject(project)
 
