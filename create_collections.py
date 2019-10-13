@@ -27,11 +27,11 @@ def main():
                       "status": "Terminated", "date_created": datetime.datetime.now().isoformat()})
 
     projects = db["Project"]
-    projects.insert_one({"project_id": ObjectId(), "project_name": "Red",
+    projects.insert_one({"project_id": ObjectId(), "project_name": "RED",
                          "team_id": canyon_id, "description": "Red project description."})
-    projects.insert_one({"project_id": ObjectId(), "project_name": "Blue",
+    projects.insert_one({"project_id": ObjectId(), "project_name": "BLUE",
                          "team_id": ridge_id, "description": "Blue project description."})
-    projects.insert_one({"project_id": ObjectId(), "project_name": "Gold",
+    projects.insert_one({"project_id": ObjectId(), "project_name": "GOLD",
                          "team_id": peak_id, "description": "Gold project description."})
 
     sprints = db["Sprint"]
@@ -71,7 +71,7 @@ def main():
         "Find a secure way to handle CORS with GraphQL requests.",
     ]
     project_names = [
-        "Red", "Blue", "Gold"
+        "RED", "BLUE", "GOLD"
     ]
     sprint_names = [
         "Alpha", "Beta", "Gamma", "Delta"
@@ -90,7 +90,7 @@ def main():
         ticket_number = collectionFunctions.findNextId(
             "Ticket", {"project_name": project}, "ticket_number")
         tickets.insert_one({
-            "ticket_id": ObjectId(),
+            "id": ObjectId(),
             "ticket_number": ticket_number,
             "project_name": project,
             "sprint_name": sprint_names[random.randint(0, len(sprint_names)-1)],

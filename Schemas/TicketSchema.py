@@ -22,7 +22,7 @@ class CreateTicket(graphene.Mutation):
     ticket = graphene.Field(TicketSchema)
 
     class Arguments:
-        project_name = graphene.String(required=True)
+        project_name = graphene.String(required=False)
         description = graphene.String(required=False)
         priority = graphene.String(required=False)
         sprint_name = graphene.String(required=False)
@@ -30,7 +30,8 @@ class CreateTicket(graphene.Mutation):
         story_points = graphene.Int(required=False)
         ticket_type = graphene.String(required=False)
 
-    def mutate(self, info, description=None, priority=None, sprint_name=None, project_name=None, story_points=None, ticket_type=None):
+    def mutate(self, info, description=None, priority=None, sprint_name=None, project_name="NOPROJECT", story_points=None, ticket_type=None):
+        project_name = project_name.upper()
         ticket_number = collectionFunctions.findNextId(
             "Ticket", {"project_name": project_name}, "ticket_number")
         ticket = TicketModel(
@@ -60,13 +61,13 @@ class UpdateTicket(graphene.Mutation):
 
     class Arguments:
         changes = TicketInput(required=True)
-        ticket = TicketInput(required=True)
+        ticket_id = graphene.ID(required=True)
 
-    def mutate(self, info, ticket, changes):
-        ticket = TicketModel(**dict(ticket.items()))
+    def mutate(self, info, ticket_id, changes):
+        ticket = TicketModel.objects.get(ticket_id=ObjectId(ticket_id))
         if ("project_name" in changes.keys()):
             ticket_number = collectionFunctions.findNextId(
-                "Ticket", {"project_name": changes["project_name"]}, "ticket_number")
+                "Ticket", {"project_name": changes['project_name']}, "ticket_number")
             changes["ticket_number"] = ticket_number
         for k, v in changes.items():
             ticket[k] = v
