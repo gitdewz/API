@@ -20,11 +20,11 @@ def main():
     ridge_id = ObjectId()
     peak_id = ObjectId()
     teams.insert_one({"team_id": canyon_id, "team_name": "Canyon",
-                      "status": "Active", "date_created": datetime.datetime.now().isoformat()})
+                      "status": "Active", "date_created": datetime.datetime.now()})
     teams.insert_one({"team_id": ObjectId(), "team_name": "Ridge",
-                      "status": "Pending", "date_created": datetime.datetime.now().isoformat()})
+                      "status": "Pending", "date_created": datetime.datetime.now()})
     teams.insert_one({"team_id": ObjectId(), "team_name": "Peak",
-                      "status": "Terminated", "date_created": datetime.datetime.now().isoformat()})
+                      "status": "Terminated", "date_created": datetime.datetime.now()})
 
     projects = db["Project"]
     projects.insert_one({"project_id": ObjectId(), "project_name": "RED",
@@ -36,17 +36,17 @@ def main():
 
     sprints = db["Sprint"]
     sprints.insert_one({"sprint_id": ObjectId(), "sprint_name": "Alpha", "goal": "Do some work on the project.",
-                        "date_start": (datetime.datetime.now()+datetime.timedelta(days=-15)).isoformat(),
-                        "date_end": (datetime.datetime.now()+datetime.timedelta(days=-1)).isoformat()})
+                        "date_start": datetime.datetime.now()+datetime.timedelta(days=-15),
+                        "date_end": datetime.datetime.now()+datetime.timedelta(days=-1)})
     sprints.insert_one({"sprint_id": ObjectId(), "sprint_name": "Beta", "goal": "Do MORE work on the project!",
-                        "date_start": (datetime.datetime.now()+datetime.timedelta(days=0)).isoformat(),
-                        "date_end": (datetime.datetime.now()+datetime.timedelta(days=14)).isoformat()})
+                        "date_start": datetime.datetime.now()+datetime.timedelta(days=0),
+                        "date_end": datetime.datetime.now()+datetime.timedelta(days=14)})
     sprints.insert_one({"sprint_id": ObjectId(), "sprint_name": "Gamma", "goal": "Keep doing work on the project.",
-                        "date_start": (datetime.datetime.now()+datetime.timedelta(days=15)).isoformat(),
-                        "date_end": (datetime.datetime.now()+datetime.timedelta(days=29)).isoformat()})
+                        "date_start": datetime.datetime.now()+datetime.timedelta(days=15),
+                        "date_end": datetime.datetime.now()+datetime.timedelta(days=29)})
     sprints.insert_one({"sprint_id": ObjectId(), "sprint_name": "Delta", "goal": "Complete the project.",
-                        "date_start": (datetime.datetime.now()+datetime.timedelta(days=30)).isoformat(),
-                        "date_end": (datetime.datetime.now()+datetime.timedelta(days=44)).isoformat()})
+                        "date_start": datetime.datetime.now()+datetime.timedelta(days=30),
+                        "date_end": datetime.datetime.now()+datetime.timedelta(days=44)})
 
     tickets = db["Ticket"]
     ticket_descriptions = [

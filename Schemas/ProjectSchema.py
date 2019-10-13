@@ -21,7 +21,7 @@ class CreateProject(graphene.Mutation):
 
     def mutate(self, info, project_name, team_id=None, description=None):
         project = ProjectModel(
-            id=ObjectId(), project_name=project_name, team_id=team_id, description=description)
+            id=ObjectId(), project_name=project_name, team_id=ObjectId(team_id), description=description)
         project.save()
         return CreateProject(project)
 
@@ -43,6 +43,8 @@ class UpdateProject(graphene.Mutation):
     def mutate(self, info, project_id, changes):
         project = ProjectModel.objects.get(project_id=ObjectId(project_id))
         for k, v in changes.items():
+            if k == "team_id":
+                v = ObjectId(v)
             project[k] = v
         project.update(**dict(changes.items()))
         return UpdateProject(project)
