@@ -10,6 +10,7 @@ from flask_graphql import GraphQLView
 from Schemas.Schema import schema
 from Schemas.LoginSchema import login_schema
 from mongoengine import connect
+from GLOBAL import DB_NAME
 # import jwt  # JSON Web Tokens
 
 if __name__ == "__main__":
@@ -56,7 +57,7 @@ if __name__ == "__main__":
 
     try:
         PORT = int(os.environ.get("SERVER_PORT", "5556"))
-        connect("mongoengine", host="mongodb://localhost:27017/",
+        connect(DB_NAME, host="mongodb://localhost:27017/",
                 alias="default")
     except ValueError:
         PORT = 5556

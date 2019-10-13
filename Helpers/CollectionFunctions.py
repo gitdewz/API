@@ -1,4 +1,5 @@
 import pymongo
+from GLOBAL import DB_NAME
 
 # TODO
 # 1. Create constants for db / collections
@@ -9,7 +10,7 @@ class CollectionFunctions:
         mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
 
         # TODO - create global db name const
-        self.db = mongo_client["mongoengine"]
+        self.db = mongo_client[DB_NAME]
 
     def doesCollectionExist(self, collectionName, whereClause):
         collection = self.db[collectionName]

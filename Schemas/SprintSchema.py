@@ -17,13 +17,12 @@ class CreateSprint(graphene.Mutation):
     class Arguments:
         sprint_name = graphene.String(required=True)
         goal = graphene.String(required=False)
-        project_name = graphene.String(required=False)
         date_start = graphene.DateTime(required=False)
         date_end = graphene.DateTime(required=False)
 
-    def mutate(self, info, sprint_name, goal=None, project_name=None, date_start=None, date_end=None):
+    def mutate(self, info, sprint_name, goal=None, date_start=None, date_end=None):
         sprint = SprintModel(
-            id=ObjectId(), sprint_name=sprint_name, goal=goal, project_name=project_name, date_start=date_start, date_end=date_end)
+            id=ObjectId(), sprint_name=sprint_name, goal=goal, date_start=date_start, date_end=date_end)
         sprint.save()
         return CreateSprint(sprint)
 
@@ -32,7 +31,6 @@ class SprintInput(graphene.InputObjectType):
     sprint_id = graphene.ID(required=False)
     sprint_name = graphene.String(required=False)
     goal = graphene.String(required=False)
-    project_name = graphene.String(required=False)
     date_start = graphene.DateTime(required=False)
     date_end = graphene.DateTime(required=False)
 
