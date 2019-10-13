@@ -1,6 +1,5 @@
 from mongoengine import Document
-from mongoengine.fields import IntField, ListField, ObjectIdField, StringField
-from Models.Ticket import Ticket
+from mongoengine.fields import IntField, ObjectIdField, StringField
 
 
 class Project(Document):
@@ -9,4 +8,3 @@ class Project(Document):
     project_name = StringField(unique=True)
     team_id = ObjectIdField()
     description = StringField()
-    tickets = ListField(field=ObjectIdField(), default=[])
