@@ -1,10 +1,11 @@
+from Helpers.CollectionFunctions import CollectionFunctions
 import pymongo
 import datetime
 import random
 from bson import ObjectId
 from hashlib import sha224
-from GLOBAL import DB_NAME
-from Helpers.CollectionFunctions import CollectionFunctions
+from GLOBAL import (DB_NAME, PROJECT_COLLECTION, SPRINT_COLLECTION, TEAM_COLLECTION,
+                    TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION)
 collectionFunctions = CollectionFunctions()
 
 
@@ -12,11 +13,15 @@ def main():
     mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
     db = mongo_client[DB_NAME]
 
-    users = db["User"]
-    users.insert_one({"user_id": ObjectId(), "email": "admin@test.com",
-                      "password": sha224(b"password").hexdigest(), "first_name": "Powerful", "last_name": "User"})
+    users = db[USER_COLLECTION]
+    admin_id = ObjectId()
+    test_user_id = ObjectId()
+    users.insert_one({"user_id": admin_id, "email": "admin@test.com",
+                      "password": sha224(b"admin").hexdigest(), "first_name": "Admin", "last_name": "User"})
+    users.insert_one({"user_id": test_user_id, "email": "test_user@test.com",
+                      "password": sha224(b"password").hexdigest(), "first_name": "Test", "last_name": "User"})
 
-    teams = db["Team"]
+    teams = db[TEAM_COLLECTION]
     canyon_id = ObjectId()
     ridge_id = ObjectId()
     peak_id = ObjectId()
@@ -27,7 +32,13 @@ def main():
     teams.insert_one({"team_id": ObjectId(), "team_name": "Peak",
                       "status": "Terminated", "date_created": datetime.datetime.now()})
 
-    projects = db["Project"]
+    user_teams = db[USER_TEAM_COLLECTION]
+    user_teams.insert_one(
+        {"user_team_id": ObjectId(), "user_id": admin_id, "team_id": canyon_id})
+    user_teams.insert_one(
+        {"user_team_id": ObjectId(), "user_id": test_user_id, "team_id": canyon_id})
+
+    projects = db[PROJECT_COLLECTION]
     projects.insert_one({"project_id": ObjectId(), "project_name": "RED",
                          "team_id": canyon_id, "description": "Red project description."})
     projects.insert_one({"project_id": ObjectId(), "project_name": "BLUE",
@@ -35,7 +46,7 @@ def main():
     projects.insert_one({"project_id": ObjectId(), "project_name": "GOLD",
                          "team_id": peak_id, "description": "Gold project description."})
 
-    sprints = db["Sprint"]
+    sprints = db[SPRINT_COLLECTION]
     sprints.insert_one({"sprint_id": ObjectId(), "sprint_name": "Alpha", "goal": "Do some work on the project.",
                         "date_start": datetime.datetime.now()+datetime.timedelta(days=-15),
                         "date_end": datetime.datetime.now()+datetime.timedelta(days=-1)})
@@ -49,7 +60,7 @@ def main():
                         "date_start": datetime.datetime.now()+datetime.timedelta(days=30),
                         "date_end": datetime.datetime.now()+datetime.timedelta(days=44)})
 
-    tickets = db["Ticket"]
+    tickets = db[TICKET_COLLECTION]
     ticket_descriptions = [
         "Do some work in the app and make things talk to other things.",
         "Research that issue we talked about last week and leave notes on the job.",
@@ -100,9 +111,6 @@ def main():
             "story_points": story_points[random.randint(0, len(story_points)-1)],
             "description": description
         })
-
-    # collection.drop()
-    # collection.insert_one({"sessionID": "12345", "userID": "1", "authenticated": True})
 
 
 if __name__ == '__main__':
