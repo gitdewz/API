@@ -3,6 +3,7 @@ from graphene.relay import Node
 from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
 from Models.User import User as UserModel
 from bson import ObjectId
+from hashlib import sha224
 from Helpers.CollectionFunctions import CollectionFunctions
 import uuid
 
@@ -31,6 +32,8 @@ class CreateUser(graphene.Mutation):
         last_name = graphene.String(required=True)
 
     def mutate(self, info, email, password, first_name, last_name):
+        password = sha224(password.encode("utf-8")).hexdigest()
+        print(f"Password: {password}")
         user = UserModel(id=ObjectId(), email=email, password=password,
                          first_name=first_name, last_name=last_name)
         user.save()
@@ -52,6 +55,9 @@ class LoginUser(graphene.Mutation):
         password = graphene.String(required=True)
 
     def mutate(self, info, email, password):
+        print(password.encode("utf-8"))
+        password = sha224(password.encode("utf-8")).hexdigest()
+        print(f"Password: {password}")
         user = collectionFunctions.findUser(email, password)
         if user:
             # TODO - is random UUID the best? look at other options
@@ -81,6 +87,8 @@ class UpdateUser(graphene.Mutation):
     def mutate(self, info, user_id, changes):
         user = UserModel.objects.get(user_id=ObjectId(user_id))
         for k, v in changes.items():
+            if k == "password":
+                v = sha224(str(v).encode("utf-8")).hexdigest()
             user[k] = v
         user.update(**dict(changes.items()))
         return UpdateUser(user)

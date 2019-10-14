@@ -2,6 +2,7 @@ import pymongo
 import datetime
 import random
 from bson import ObjectId
+from hashlib import sha224
 from GLOBAL import DB_NAME
 from Helpers.CollectionFunctions import CollectionFunctions
 collectionFunctions = CollectionFunctions()
@@ -13,7 +14,7 @@ def main():
 
     users = db["User"]
     users.insert_one({"user_id": ObjectId(), "email": "admin@test.com",
-                      "password": "password", "first_name": "Powerful", "last_name": "User"})
+                      "password": sha224(b"password").hexdigest(), "first_name": "Powerful", "last_name": "User"})
 
     teams = db["Team"]
     canyon_id = ObjectId()
