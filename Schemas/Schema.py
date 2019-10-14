@@ -3,12 +3,14 @@ from graphene.relay import Node
 from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
 from Models.Project import Project as ProjectModel
 from Models.Sprint import Sprint as SprintModel
+from Models.SprintProject import SprintProject as SprintProjectModel
 from Models.Team import Team as TeamModel
 from Models.Ticket import Ticket as TicketModel
 from Models.User import User as UserModel
 from Models.UserTeam import UserTeam as UserTeamModel
 from Schemas.ProjectSchema import CreateProject, DeleteProject, UpdateProject, ProjectSchema
 from Schemas.SprintSchema import CreateSprint, DeleteSprint, UpdateSprint, SprintSchema
+from Schemas.SprintProjectSchema import CreateSprintProject, DeleteSprintProject, UpdateSprintProject, SprintProjectSchema
 from Schemas.TeamSchema import CreateTeam, DeleteTeam, UpdateTeam, TeamSchema
 from Schemas.TicketSchema import CreateTicket, DeleteTicket, UpdateTicket, TicketSchema
 from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, UserSchema
@@ -32,6 +34,14 @@ class Query(graphene.ObjectType):
 
     def resolve_all_sprints(self, info):
         return list(SprintModel.objects().all())
+
+    # SprintProject Queries
+    sprint_projects = MongoengineConnectionField(SprintProjectSchema)
+
+    all_sprint_projects = graphene.List(SprintProjectSchema)
+
+    def resolve_all_sprint_projects(self, info):
+        return list(SprintProjectModel.objects().all())
 
     # Team Queries
     teams = MongoengineConnectionField(TeamSchema)
@@ -64,7 +74,7 @@ class Query(graphene.ObjectType):
     def resolve_all_users(self, info):
         return list(UserModel.objects().all())
 
-    # User Team Queries
+    # UserTeam Queries
     user_teams = MongoengineConnectionField(UserTeamSchema)
 
     all_user_teams = graphene.List(UserTeamSchema)
@@ -84,6 +94,11 @@ class Mutation(graphene.ObjectType):
     delete_sprint = DeleteSprint.Field()
     update_sprint = UpdateSprint.Field()
 
+    # SprintProject Mutations
+    create_sprint_project = CreateSprintProject.Field()
+    delete_sprint_project = DeleteSprintProject.Field()
+    update_sprint_project = UpdateSprintProject.Field()
+
     # Team Mutations
     create_team = CreateTeam.Field()
     delete_team = DeleteTeam.Field()
@@ -100,7 +115,7 @@ class Mutation(graphene.ObjectType):
     login_user = LoginUser.Field()
     update_user = UpdateUser.Field()
 
-    # User Team Mutations
+    # UserTeam Mutations
     create_user_team = CreateUserTeam.Field()
     delete_user_team = DeleteUserTeam.Field()
     update_user_team = UpdateUserTeam.Field()

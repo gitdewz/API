@@ -2,8 +2,8 @@ import pymongo
 import datetime
 import random
 from bson import ObjectId
-from GLOBAL import (DB_NAME, PROJECT_COLLECTION, SPRINT_COLLECTION, TEAM_COLLECTION,
-                    TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION)
+from GLOBAL import (DB_NAME, PROJECT_COLLECTION, SPRINT_COLLECTION, SPRINT_PROJECT_COLLECTION,
+                    TEAM_COLLECTION, TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION)
 from Helpers.CollectionFunctions import CollectionFunctions
 collectionFunctions = CollectionFunctions()
 
@@ -26,6 +26,8 @@ def main():
 
     sprints = db[SPRINT_COLLECTION]
     sprints.drop()
+
+    sprint_projects = db[SPRINT_PROJECT_COLLECTION]
 
     tickets = db[TICKET_COLLECTION]
     tickets.drop()
