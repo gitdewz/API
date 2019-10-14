@@ -28,6 +28,7 @@ def main():
     sprints.drop()
 
     sprint_projects = db[SPRINT_PROJECT_COLLECTION]
+    sprint_projects.drop()
 
     tickets = db[TICKET_COLLECTION]
     tickets.drop()
