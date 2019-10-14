@@ -13,3 +13,4 @@ class Ticket(Document):
     priority = StringField()
     story_points = IntField()
     description = StringField()
+    active_user_id = ObjectIdField()

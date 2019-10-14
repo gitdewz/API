@@ -6,11 +6,13 @@ from Models.Sprint import Sprint as SprintModel
 from Models.Team import Team as TeamModel
 from Models.Ticket import Ticket as TicketModel
 from Models.User import User as UserModel
+from Models.UserTeam import UserTeam as UserTeamModel
 from Schemas.ProjectSchema import CreateProject, DeleteProject, UpdateProject, ProjectSchema
 from Schemas.SprintSchema import CreateSprint, DeleteSprint, UpdateSprint, SprintSchema
 from Schemas.TeamSchema import CreateTeam, DeleteTeam, UpdateTeam, TeamSchema
 from Schemas.TicketSchema import CreateTicket, DeleteTicket, UpdateTicket, TicketSchema
 from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, UserSchema
+from Schemas.UserTeamSchema import CreateUserTeam, DeleteUserTeam, UpdateUserTeam, UserTeamSchema
 from bson import ObjectId
 
 
@@ -62,6 +64,14 @@ class Query(graphene.ObjectType):
     def resolve_all_users(self, info):
         return list(UserModel.objects().all())
 
+    # User Team Queries
+    user_teams = MongoengineConnectionField(UserTeamSchema)
+
+    all_user_teams = graphene.List(UserTeamSchema)
+
+    def resolve_all_user_teams(self, info):
+        return list(UserTeamModel.objects().all())
+
 
 class Mutation(graphene.ObjectType):
     # Project Mutations
@@ -89,6 +99,11 @@ class Mutation(graphene.ObjectType):
     delete_user = DeleteUser.Field()
     login_user = LoginUser.Field()
     update_user = UpdateUser.Field()
+
+    # User Team Mutations
+    create_user_team = CreateUserTeam.Field()
+    delete_user_team = DeleteUserTeam.Field()
+    update_user_team = UpdateUserTeam.Field()
 
 
 schema = graphene.Schema(

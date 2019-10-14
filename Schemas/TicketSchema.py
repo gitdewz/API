@@ -29,8 +29,9 @@ class CreateTicket(graphene.Mutation):
         project_name = graphene.String(required=False)
         story_points = graphene.Int(required=False)
         ticket_type = graphene.String(required=False)
+        active_user_id = graphene.ID(required=False)
 
-    def mutate(self, info, description=None, priority=None, sprint_name=None, project_name="NOPROJECT", story_points=None, ticket_type=None):
+    def mutate(self, info, description=None, priority=None, sprint_name=None, project_name="NOPROJECT", story_points=None, ticket_type=None, active_user_id=None):
         project_name = project_name.upper()
         ticket_number = collectionFunctions.findNextId(
             "Ticket", {"project_name": project_name}, "ticket_number")
@@ -41,6 +42,7 @@ class CreateTicket(graphene.Mutation):
         ticket.sprint_name = sprint_name
         ticket.story_points = story_points
         ticket.ticket_type = ticket_type
+        ticket.active_user_id = active_user_id
         ticket.save()
         return CreateTicket(ticket)
 
@@ -54,6 +56,7 @@ class TicketInput(graphene.InputObjectType):
     priority = graphene.String(required=False)
     story_points = graphene.Int(required=False)
     description = graphene.String(required=False)
+    active_user_id = graphene.ID(required=False)
 
 
 class UpdateTicket(graphene.Mutation):
