@@ -3,7 +3,8 @@ import datetime
 import random
 from bson import ObjectId
 from GLOBAL import (DB_NAME, PROJECT_COLLECTION, SPRINT_COLLECTION, TEAM_COLLECTION,
-                    TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION)from Helpers.CollectionFunctions import CollectionFunctions
+                    TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION)
+from Helpers.CollectionFunctions import CollectionFunctions
 collectionFunctions = CollectionFunctions()
 
 
