@@ -5,10 +5,6 @@ from Models.Ticket import Ticket as TicketModel
 from bson import ObjectId
 from Helpers.CollectionFunctions import CollectionFunctions
 
-# TODO - recreate collection functions a better way,
-# probably don't need them all with graphql
-collectionFunctions = CollectionFunctions()
-
 # Taylor is the best
 
 
@@ -32,6 +28,7 @@ class CreateTicket(graphene.Mutation):
         active_user_id = graphene.ID(required=False)
 
     def mutate(self, info, description=None, priority=None, sprint_name=None, project_name="NOPROJECT", story_points=None, ticket_type=None, active_user_id=None):
+        collectionFunctions = CollectionFunctions()
         project_name = project_name.upper()
         ticket_number = collectionFunctions.findNextId(
             "Ticket", {"project_name": project_name}, "ticket_number")
@@ -67,6 +64,7 @@ class UpdateTicket(graphene.Mutation):
         ticket_id = graphene.ID(required=True)
 
     def mutate(self, info, ticket_id, changes):
+        collectionFunctions = CollectionFunctions()
         ticket = TicketModel.objects.get(ticket_id=ObjectId(ticket_id))
         if ("project_name" in changes.keys()):
             ticket_number = collectionFunctions.findNextId(

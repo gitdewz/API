@@ -1,15 +1,16 @@
+import os
 import pymongo
 import datetime
 import random
 from bson import ObjectId
-from GLOBAL import (DB_NAME, PROJECT_COLLECTION, SPRINT_COLLECTION, SPRINT_PROJECT_COLLECTION,
+from GLOBAL import (CLIENT_ENV_KEY, DB_NAME, PROJECT_COLLECTION, SPRINT_COLLECTION, SPRINT_PROJECT_COLLECTION,
                     TEAM_COLLECTION, TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION)
 from Helpers.CollectionFunctions import CollectionFunctions
 collectionFunctions = CollectionFunctions()
 
 
 def main():
-    mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
+    mongo_client = pymongo.MongoClient(os.environ[CLIENT_ENV_KEY])
     db = mongo_client[DB_NAME]
 
     users = db[USER_COLLECTION]

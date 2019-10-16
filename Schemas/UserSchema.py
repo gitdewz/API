@@ -7,10 +7,6 @@ from hashlib import sha224
 from Helpers.CollectionFunctions import CollectionFunctions
 import uuid
 
-# TODO - recreate collection functions a better way,
-# probably don't need them all with graphql
-collectionFunctions = CollectionFunctions()
-
 # Taylor is the best
 
 
@@ -32,6 +28,7 @@ class CreateUser(graphene.Mutation):
         last_name = graphene.String(required=True)
 
     def mutate(self, info, email, password, first_name, last_name):
+        collectionFunctions = CollectionFunctions()
         password = sha224(password.encode("utf-8")).hexdigest()
         print(f"Password: {password}")
         user = UserModel(id=ObjectId(), email=email, password=password,
@@ -55,9 +52,8 @@ class LoginUser(graphene.Mutation):
         password = graphene.String(required=True)
 
     def mutate(self, info, email, password):
-        print(password.encode("utf-8"))
+        collectionFunctions = CollectionFunctions()
         password = sha224(password.encode("utf-8")).hexdigest()
-        print(f"Password: {password}")
         user = collectionFunctions.findUser(email, password)
         if user:
             # TODO - is random UUID the best? look at other options

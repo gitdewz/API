@@ -1,5 +1,6 @@
+import os
 import pymongo
-from GLOBAL import DB_NAME
+from GLOBAL import CLIENT_ENV_KEY, DB_NAME
 
 # TODO
 # 1. Create constants for db / collections
@@ -7,7 +8,8 @@ from GLOBAL import DB_NAME
 
 class CollectionFunctions:
     def __init__(self):
-        mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
+        print(os.environ["MONGODB"])
+        mongo_client = pymongo.MongoClient(os.environ[CLIENT_ENV_KEY])
 
         # TODO - create global db name const
         self.db = mongo_client[DB_NAME]

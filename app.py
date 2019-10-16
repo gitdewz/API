@@ -10,28 +10,32 @@ from flask_graphql import GraphQLView
 from Schemas.Schema import schema
 from Schemas.LoginSchema import login_schema
 from mongoengine import connect
-from GLOBAL import DB_NAME
+from GLOBAL import CLIENT_ENV_KEY, DB_NAME
 # import jwt  # JSON Web Tokens
 
 if __name__ == "__main__":
+    os.environ[CLIENT_ENV_KEY] = "mongodb://localhost:27017/"
     collectionFunctions = CollectionFunctions()
 
-    app = Flask(__name__)
+    application = Flask(__name__)
+    @application.route("/")
+    def index():
+        return "api"
 
     # TODO - config test/prod environments
-    app.config["DEV"] = True
+    application.config["DEV"] = True
 
     # TODO - figure out how to handle cors correctly ... might've changed with graphql
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    CORS(application, resources={r"/*": {"origins": "*"}})
 
     # Make the WSGI interface available at the top level so wfastcgi can get it.
-    wsgi_app = app.wsgi_app
+    # application = app.wsgi_app
 
     def graphql_login():
         # TODO - graphiql should probably be false
         return GraphQLView.as_view("login", schema=login_schema, graphiql=True)
 
-    app.add_url_rule("/login", view_func=graphql_login())
+    application.add_url_rule("/login", view_func=graphql_login())
 
     def auth_required(fn):
         def wrapper(*args, **kwargs):
@@ -44,22 +48,22 @@ if __name__ == "__main__":
 
     def graphql_view():
         view = GraphQLView.as_view("graphql", schema=schema, graphiql=True)
-        if (app.config["DEV"]):
+        if (application.config["DEV"]):
             return view
         return auth_required(view)
 
-    app.add_url_rule("/graphql", view_func=graphql_view(),
+    application.add_url_rule("/graphql", view_func=graphql_view(),
                      methods=["GET", "POST"])
 
     HOST = os.environ.get("SERVER_HOST", "localhost")
-    mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
+    mongo_client = pymongo.MongoClient(os.environ[CLIENT_ENV_KEY])
     print(mongo_client.list_database_names())
 
     try:
         PORT = int(os.environ.get("SERVER_PORT", "5556"))
-        connect(DB_NAME, host="mongodb://localhost:27017/",
+        connect(DB_NAME, host=os.environ[CLIENT_ENV_KEY],
                 alias="default")
     except ValueError:
         PORT = 5556
-    app.secret_key = os.urandom(12)
-    app.run(HOST, PORT, debug=True)
+    application.secret_key = os.urandom(12)
+    application.run(HOST, PORT, debug=True)

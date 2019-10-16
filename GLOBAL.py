@@ -2,6 +2,7 @@
 MongoDB Constants
 """
 # Database
+CLIENT_ENV_KEY = "MONGODB"
 DB_NAME = "mongoengine_test"
 
 # Collections
