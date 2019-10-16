@@ -20,6 +20,7 @@
         * Setup documentation: https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-os-x/
     * **Linux** -
         * Setup documentation: https://docs.mongodb.com/v3.2/administration/install-on-linux/
+    * Make sure the service is running on port 27017
 
 4. **Start the app**
     * If the virtual environment isn't already active use the commands above to activate it
