@@ -56,10 +56,10 @@ def main():
     project = ProjectModel(id=red_id, project_name="RED",
                            team_id=canyon_id, description="Red project description.")
     project.save()
-    project = ProjectModel(id=red_id, project_name="BLUE",
+    project = ProjectModel(id=blue_id, project_name="BLUE",
                            team_id=ridge_id, description="Blue project description.")
     project.save()
-    project = ProjectModel(id=red_id, project_name="GOLD",
+    project = ProjectModel(id=gold_id, project_name="GOLD",
                            team_id=peak_id, description="Gold project description.")
     project.save()
 
