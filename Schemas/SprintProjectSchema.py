@@ -54,7 +54,7 @@ class DeleteSprintProject(graphene.Mutation):
         sprint_project_id = graphene.ID(required=True)
 
     def mutate(self, info, sprint_project_id):
-        sprint_project = SprintProjectModel(
-            sprint_project_id=sprint_project_id)
+        sprint_project = SprintProjectModel.objects.get(
+            sprint_project_id=ObjectId(sprint_project_id))
         sprint_project.delete()
         return DeleteSprintProject(success=True)

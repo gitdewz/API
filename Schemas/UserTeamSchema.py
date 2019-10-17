@@ -52,6 +52,6 @@ class DeleteUserTeam(graphene.Mutation):
         user_team_id = graphene.ID(required=True)
 
     def mutate(self, info, user_team_id):
-        user_team = UserTeamModel(user_team_id=user_team_id)
+        user_team = UserTeamModel.objects.get(user_team_id=ObjectId(user_team_id))
         user_team.delete()
         return DeleteUserTeam(success=True)

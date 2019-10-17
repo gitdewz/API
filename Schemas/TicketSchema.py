@@ -82,6 +82,6 @@ class DeleteTicket(graphene.Mutation):
         ticket_id = graphene.ID(required=True)
 
     def mutate(self, info, ticket_id):
-        ticket = TicketModel(ticket_id=ticket_id)
+        ticket = TicketModel.objects.get(ticket_id=ObjectId(ticket_id))
         ticket.delete()
         return DeleteTicket(success=True)

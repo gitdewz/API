@@ -57,6 +57,6 @@ class DeleteSprint(graphene.Mutation):
         sprint_id = graphene.ID(required=True)
 
     def mutate(self, info, sprint_id):
-        sprint = SprintModel(sprint_id=sprint_id)
+        sprint = SprintModel.objects.get(sprint_id=ObjectId(sprint_id))
         sprint.delete()
         return DeleteSprint(success=True)
