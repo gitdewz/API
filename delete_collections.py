@@ -6,10 +6,11 @@ from bson import ObjectId
 from GLOBAL import (CLIENT_ENV_KEY, DB_NAME, PROJECT_COLLECTION, SPRINT_COLLECTION, SPRINT_PROJECT_COLLECTION,
                     TEAM_COLLECTION, TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION)
 from Helpers.CollectionFunctions import CollectionFunctions
-collectionFunctions = CollectionFunctions()
 
 
 def main():
+    os.environ[CLIENT_ENV_KEY] = "mongodb://localhost:27017/"
+    collectionFunctions = CollectionFunctions()
     mongo_client = pymongo.MongoClient(os.environ[CLIENT_ENV_KEY])
     db = mongo_client[DB_NAME]
 

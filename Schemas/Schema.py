@@ -27,6 +27,12 @@ class Query(graphene.ObjectType):
     def resolve_all_projects(self, info):
         return list(ProjectModel.objects().all())
 
+    project = graphene.Field(
+        ProjectSchema, project_name=graphene.String())
+
+    def resolve_project(self, info, project_name):
+        return ProjectModel.objects.get(project_name__iexact=project_name)
+
     # Sprint Queries
     sprints = MongoengineConnectionField(SprintSchema)
 
@@ -122,4 +128,4 @@ class Mutation(graphene.ObjectType):
 
 
 schema = graphene.Schema(
-    query=Query, types=[ProjectSchema, TicketSchema, UserSchema], mutation=Mutation)
+    query=Query, types=[ProjectSchema, SprintSchema, TeamSchema, TicketSchema, UserSchema, UserTeamSchema], mutation=Mutation)

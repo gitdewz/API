@@ -7,47 +7,47 @@ from bson import ObjectId
 from hashlib import sha224
 from GLOBAL import (CLIENT_ENV_KEY, DB_NAME, PROJECT_COLLECTION, SPRINT_COLLECTION, SPRINT_PROJECT_COLLECTION,
                     TEAM_COLLECTION, TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION)
-collectionFunctions = CollectionFunctions()
-
 
 def main():
+    os.environ[CLIENT_ENV_KEY] = "mongodb://localhost:27017/"
+    collectionFunctions = CollectionFunctions()
     mongo_client = pymongo.MongoClient(os.environ[CLIENT_ENV_KEY])
     db = mongo_client[DB_NAME]
 
     users = db[USER_COLLECTION]
     admin_id = ObjectId()
     test_user_id = ObjectId()
-    users.insert_one({"user_id": admin_id, "email": "admin@test.com",
+    users.insert_one({"id": admin_id, "email": "admin@test.com",
                       "password": sha224(b"admin").hexdigest(), "first_name": "Admin", "last_name": "User"})
-    users.insert_one({"user_id": test_user_id, "email": "test_user@test.com",
+    users.insert_one({"id": test_user_id, "email": "test_user@test.com",
                       "password": sha224(b"password").hexdigest(), "first_name": "Test", "last_name": "User"})
 
     teams = db[TEAM_COLLECTION]
     canyon_id = ObjectId()
     ridge_id = ObjectId()
     peak_id = ObjectId()
-    teams.insert_one({"team_id": canyon_id, "team_name": "Canyon",
+    teams.insert_one({"id": canyon_id, "team_name": "Canyon",
                       "status": "Active", "date_created": datetime.datetime.now()})
-    teams.insert_one({"team_id": ObjectId(), "team_name": "Ridge",
+    teams.insert_one({"id": ridge_id, "team_name": "Ridge",
                       "status": "Pending", "date_created": datetime.datetime.now()})
-    teams.insert_one({"team_id": ObjectId(), "team_name": "Peak",
+    teams.insert_one({"id": peak_id, "team_name": "Peak",
                       "status": "Terminated", "date_created": datetime.datetime.now()})
 
     user_teams = db[USER_TEAM_COLLECTION]
     user_teams.insert_one(
-        {"user_team_id": ObjectId(), "user_id": admin_id, "team_id": canyon_id})
+        {"team_id": ObjectId(), "user_id": admin_id, "team_id": canyon_id})
     user_teams.insert_one(
-        {"user_team_id": ObjectId(), "user_id": test_user_id, "team_id": canyon_id})
+        {"id": ObjectId(), "user_id": test_user_id, "team_id": canyon_id})
 
     projects = db[PROJECT_COLLECTION]
     red_id = ObjectId()
     blue_id = ObjectId()
     gold_id = ObjectId()
-    projects.insert_one({"project_id": red_id, "project_name": "RED",
+    projects.insert_one({"id": red_id, "project_name": "RED",
                          "team_id": canyon_id, "description": "Red project description."})
-    projects.insert_one({"project_id": blue_id, "project_name": "BLUE",
+    projects.insert_one({"id": blue_id, "project_name": "BLUE",
                          "team_id": ridge_id, "description": "Blue project description."})
-    projects.insert_one({"project_id": gold_id, "project_name": "GOLD",
+    projects.insert_one({"id": gold_id, "project_name": "GOLD",
                          "team_id": peak_id, "description": "Gold project description."})
 
     sprints = db[SPRINT_COLLECTION]
@@ -55,44 +55,44 @@ def main():
     beta_id = ObjectId()
     gamma_id = ObjectId()
     delta_id = ObjectId()
-    sprints.insert_one({"sprint_id": alpha_id, "sprint_name": "Alpha", "goal": "Do some work on the project.",
+    sprints.insert_one({"id": alpha_id, "sprint_name": "Alpha", "goal": "Do some work on the project.",
                         "date_start": datetime.datetime.now()+datetime.timedelta(days=-15),
                         "date_end": datetime.datetime.now()+datetime.timedelta(days=-1)})
-    sprints.insert_one({"sprint_id": beta_id, "sprint_name": "Beta", "goal": "Do MORE work on the project!",
+    sprints.insert_one({"id": beta_id, "sprint_name": "Beta", "goal": "Do MORE work on the project!",
                         "date_start": datetime.datetime.now()+datetime.timedelta(days=0),
                         "date_end": datetime.datetime.now()+datetime.timedelta(days=14)})
-    sprints.insert_one({"sprint_id": gamma_id, "sprint_name": "Gamma", "goal": "Keep doing work on the project.",
+    sprints.insert_one({"id": gamma_id, "sprint_name": "Gamma", "goal": "Keep doing work on the project.",
                         "date_start": datetime.datetime.now()+datetime.timedelta(days=15),
                         "date_end": datetime.datetime.now()+datetime.timedelta(days=29)})
-    sprints.insert_one({"sprint_id": delta_id, "sprint_name": "Delta", "goal": "Complete the project.",
+    sprints.insert_one({"id": delta_id, "sprint_name": "Delta", "goal": "Complete the project.",
                         "date_start": datetime.datetime.now()+datetime.timedelta(days=30),
                         "date_end": datetime.datetime.now()+datetime.timedelta(days=44)})
 
     sprint_projects = db[SPRINT_PROJECT_COLLECTION]
     sprint_projects.insert_many([
-        {"sprint_project_id": ObjectId(), "sprint_id": alpha_id,
+        {"id": ObjectId(), "sprint_id": alpha_id,
          "project_id": red_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": alpha_id,
+        {"id": ObjectId(), "sprint_id": alpha_id,
          "project_id": blue_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": alpha_id,
+        {"id": ObjectId(), "sprint_id": alpha_id,
          "project_id": gold_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": beta_id,
+        {"id": ObjectId(), "sprint_id": beta_id,
          "project_id": red_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": beta_id,
+        {"id": ObjectId(), "sprint_id": beta_id,
          "project_id": blue_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": beta_id,
+        {"id": ObjectId(), "sprint_id": beta_id,
          "project_id": gold_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": gamma_id,
+        {"id": ObjectId(), "sprint_id": gamma_id,
          "project_id": red_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": gamma_id,
+        {"id": ObjectId(), "sprint_id": gamma_id,
          "project_id": blue_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": gamma_id,
+        {"id": ObjectId(), "sprint_id": gamma_id,
          "project_id": gold_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": delta_id,
+        {"id": ObjectId(), "sprint_id": delta_id,
          "project_id": red_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": delta_id,
+        {"id": ObjectId(), "sprint_id": delta_id,
          "project_id": blue_id},
-        {"sprint_project_id": ObjectId(), "sprint_id": delta_id,
+        {"id": ObjectId(), "sprint_id": delta_id,
          "project_id": gold_id}
     ])
 

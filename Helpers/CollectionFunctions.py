@@ -8,7 +8,6 @@ from GLOBAL import CLIENT_ENV_KEY, DB_NAME
 
 class CollectionFunctions:
     def __init__(self):
-        print(os.environ["MONGODB"])
         mongo_client = pymongo.MongoClient(os.environ[CLIENT_ENV_KEY])
 
         # TODO - create global db name const

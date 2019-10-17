@@ -45,7 +45,6 @@ class CreateTicket(graphene.Mutation):
 
 
 class TicketInput(graphene.InputObjectType):
-    ticket_id = graphene.String(required=False)
     project_name = graphene.String(required=False)
     ticket_number = graphene.Int(required=False)
     sprint_name = graphene.String(required=False)
