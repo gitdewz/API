@@ -35,7 +35,7 @@ def main():
 
     user_teams = db[USER_TEAM_COLLECTION]
     user_teams.insert_one(
-        {"team_id": ObjectId(), "user_id": admin_id, "team_id": canyon_id})
+        {"id": ObjectId(), "user_id": admin_id, "team_id": canyon_id})
     user_teams.insert_one(
         {"id": ObjectId(), "user_id": test_user_id, "team_id": canyon_id})
 
