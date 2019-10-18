@@ -28,10 +28,7 @@ class CreateSprintProject(graphene.Mutation):
 
 
 class SprintProjectInput(graphene.InputObjectType):
-    sprint_id = graphene.ID(required=True)
-    project_id = graphene.ID(required=True)
-    goal = graphene.ID(required=False)
-
+    goal = graphene.String(required=False)
 
 class UpdateSprintProject(graphene.Mutation):
     sprint_project = graphene.Field(SprintProjectSchema)

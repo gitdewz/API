@@ -95,10 +95,41 @@ class Query(graphene.ObjectType):
         return list(sprint_projects)
 
     sprint_project = graphene.Field(
-        SprintProjectSchema, sprint_project_id=graphene.ID())
+        SprintProjectJoin, sprint_project_id=graphene.ID())
 
     def resolve_sprint_project(self, info, sprint_project_id):
-        return SprintProjectModel.objects.get(sprint_project_id=ObjectId(sprint_project_id))
+        cursor = SprintProjectModel.objects.aggregate(*[
+            {
+                "$match": {"_id": ObjectId(sprint_project_id)}
+            },
+            {
+                "$lookup": {
+                    "from": SPRINT_COLLECTION,
+                    "localField": "sprint_id",
+                    "foreignField": "_id",
+                    "as": "sprint_data"
+                }
+            },
+            {"$unwind": "$sprint_data"},
+            {
+                "$lookup": {
+                    "from": PROJECT_COLLECTION,
+                    "localField": "project_id",
+                    "foreignField": "_id",
+                    "as": "project_data"
+                }
+            },
+            {"$unwind": "$project_data"},
+            {
+                "$project": {
+                    "_id": 0,
+                    "sprint_name": "$sprint_data.sprint_name",
+                    "project_name": "$project_data.project_name",
+                    "goal": 1,
+                }
+            },
+        ])
+        return SprintProjectJoin(**list(cursor)[0])
 
     # Team Queries
     teams = MongoengineConnectionField(TeamSchema)
