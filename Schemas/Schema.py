@@ -19,11 +19,13 @@ from bson import ObjectId
 from GLOBAL import SPRINT_COLLECTION, PROJECT_COLLECTION
 from Helpers.CollectionFunctions import CollectionFunctions
 
+
 class SprintProjectJoin(graphene.ObjectType):
     sprint_project_id = graphene.ID()
     sprint_name = graphene.String()
     project_name = graphene.String()
     goal = graphene.String()
+
 
 class Query(graphene.ObjectType):
     # Project Queries
@@ -161,6 +163,11 @@ class Query(graphene.ObjectType):
 
     def resolve_all_users(self, info):
         return list(UserModel.objects().all())
+
+    user = graphene.Field(UserSchema, user_id=graphene.ID())
+
+    def resolve_user(self, info, user_id):
+        return UserModel.objects.get(user_id=ObjectId(user_id))
 
     # UserTeam Queries
     user_teams = MongoengineConnectionField(UserTeamSchema)

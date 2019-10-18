@@ -82,9 +82,10 @@ class UpdateUser(graphene.Mutation):
 
     def mutate(self, info, user_id, changes):
         user = UserModel.objects.get(user_id=ObjectId(user_id))
+        if "password" in changes.keys():
+            changes["password"] = sha224(
+                str(changes["password"]).encode("utf-8")).hexdigest()
         for k, v in changes.items():
-            if k == "password":
-                v = sha224(str(v).encode("utf-8")).hexdigest()
             user[k] = v
         user.update(**dict(changes.items()))
         return UpdateUser(user)
