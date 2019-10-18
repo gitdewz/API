@@ -67,54 +67,54 @@ def main():
     beta_id = ObjectId()
     gamma_id = ObjectId()
     delta_id = ObjectId()
-    sprint = SprintModel(id=alpha_id, sprint_name="Alpha", goal="Do some work on the project.", date_start=datetime.datetime.now(
+    sprint = SprintModel(id=alpha_id, sprint_name="Alpha", date_start=datetime.datetime.now(
     )+datetime.timedelta(days=-15), date_end=datetime.datetime.now()+datetime.timedelta(days=-1))
     sprint.save()
-    sprint = SprintModel(id=beta_id, sprint_name="Beta", goal="Do some work on the project!", date_start=datetime.datetime.now(
+    sprint = SprintModel(id=beta_id, sprint_name="Beta", date_start=datetime.datetime.now(
     )+datetime.timedelta(days=0), date_end=datetime.datetime.now()+datetime.timedelta(days=14))
     sprint.save()
-    sprint = SprintModel(id=gamma_id, sprint_name="Gamma", goal="Keep doing work on the project.", date_start=datetime.datetime.now(
+    sprint = SprintModel(id=gamma_id, sprint_name="Gamma", date_start=datetime.datetime.now(
     )+datetime.timedelta(days=15), date_end=datetime.datetime.now()+datetime.timedelta(days=29))
     sprint.save()
-    sprint = SprintModel(id=delta_id, sprint_name="Delta", goal="Complete the project.", date_start=datetime.datetime.now(
+    sprint = SprintModel(id=delta_id, sprint_name="Delta", date_start=datetime.datetime.now(
     )+datetime.timedelta(days=30), date_end=datetime.datetime.now()+datetime.timedelta(days=44))
     sprint.save()
 
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=alpha_id, project_id=red_id)
+        id=ObjectId(), sprint_id=alpha_id, project_id=red_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=alpha_id, project_id=blue_id)
+        id=ObjectId(), sprint_id=alpha_id, project_id=blue_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=alpha_id, project_id=gold_id)
+        id=ObjectId(), sprint_id=alpha_id, project_id=gold_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=beta_id, project_id=red_id)
+        id=ObjectId(), sprint_id=beta_id, project_id=red_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=beta_id, project_id=blue_id)
+        id=ObjectId(), sprint_id=beta_id, project_id=blue_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=beta_id, project_id=gold_id)
+        id=ObjectId(), sprint_id=beta_id, project_id=gold_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=gamma_id, project_id=red_id)
+        id=ObjectId(), sprint_id=gamma_id, project_id=red_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=gamma_id, project_id=blue_id)
+        id=ObjectId(), sprint_id=gamma_id, project_id=blue_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=gamma_id, project_id=gold_id)
+        id=ObjectId(), sprint_id=gamma_id, project_id=gold_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=delta_id, project_id=red_id)
+        id=ObjectId(), sprint_id=delta_id, project_id=red_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=delta_id, project_id=blue_id)
+        id=ObjectId(), sprint_id=delta_id, project_id=blue_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=delta_id, project_id=gold_id)
+        id=ObjectId(), sprint_id=delta_id, project_id=gold_id, goal="Do some work on the project.")
     sprintProject.save()
 
     ticket_descriptions = [

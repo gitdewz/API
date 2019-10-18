@@ -18,10 +18,11 @@ class CreateSprintProject(graphene.Mutation):
     class Arguments:
         sprint_id = graphene.ID(required=True)
         project_id = graphene.ID(required=True)
+        goal = graphene.ID(required=False)
 
-    def mutate(self, info, sprint_id, project_id):
+    def mutate(self, info, sprint_id, project_id, goal=None):
         sprint_project = SprintProjectModel(
-            id=ObjectId(), sprint_id=sprint_id, project_id=project_id)
+            id=ObjectId(), sprint_id=sprint_id, project_id=project_id, goal=goal)
         sprint_project.save()
         return CreateSprintProject(sprint_project)
 
@@ -29,6 +30,7 @@ class CreateSprintProject(graphene.Mutation):
 class SprintProjectInput(graphene.InputObjectType):
     sprint_id = graphene.ID(required=True)
     project_id = graphene.ID(required=True)
+    goal = graphene.ID(required=False)
 
 
 class UpdateSprintProject(graphene.Mutation):

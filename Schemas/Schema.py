@@ -16,7 +16,14 @@ from Schemas.TicketSchema import CreateTicket, DeleteTicket, UpdateTicket, Ticke
 from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, UserSchema
 from Schemas.UserTeamSchema import CreateUserTeam, DeleteUserTeam, UpdateUserTeam, UserTeamSchema
 from bson import ObjectId
+from GLOBAL import SPRINT_COLLECTION, PROJECT_COLLECTION
+from Helpers.CollectionFunctions import CollectionFunctions
 
+class SprintProjectJoin(graphene.ObjectType):
+    sprint_project_id = graphene.ID()
+    sprint_name = graphene.String()
+    project_name = graphene.String()
+    goal = graphene.String()
 
 class Query(graphene.ObjectType):
     # Project Queries
@@ -41,13 +48,57 @@ class Query(graphene.ObjectType):
     def resolve_all_sprints(self, info):
         return list(SprintModel.objects().all())
 
+    sprint = graphene.Field(
+        SprintSchema, sprint_name=graphene.String())
+
+    def resolve_sprint(self, info, sprint_name):
+        return SprintModel.objects.get(sprint_name__iexact=sprint_name)
+
     # SprintProject Queries
     sprint_projects = MongoengineConnectionField(SprintProjectSchema)
 
-    all_sprint_projects = graphene.List(SprintProjectSchema)
+    all_sprint_projects = graphene.List(SprintProjectJoin)
 
     def resolve_all_sprint_projects(self, info):
-        return list(SprintProjectModel.objects().all())
+        cursor = SprintProjectModel.objects.aggregate(*[
+            {
+                "$lookup": {
+                    "from": SPRINT_COLLECTION,
+                    "localField": "sprint_id",
+                    "foreignField": "_id",
+                    "as": "sprint_data"
+                }
+            },
+            {"$unwind": "$sprint_data"},
+            {
+                "$lookup": {
+                    "from": PROJECT_COLLECTION,
+                    "localField": "project_id",
+                    "foreignField": "_id",
+                    "as": "project_data"
+                }
+            },
+            {"$unwind": "$project_data"},
+            {
+                "$project": {
+                    "_id": 0,
+                    "sprint_project_id": "$_id",
+                    "sprint_name": "$sprint_data.sprint_name",
+                    "project_name": "$project_data.project_name",
+                    "goal": 1,
+                }
+            },
+        ])
+        sprint_projects = []
+        for item in list(cursor):
+            sprint_projects.append(SprintProjectJoin(**item))
+        return list(sprint_projects)
+
+    sprint_project = graphene.Field(
+        SprintProjectSchema, sprint_project_id=graphene.ID())
+
+    def resolve_sprint_project(self, info, sprint_project_id):
+        return SprintProjectModel.objects.get(sprint_project_id=ObjectId(sprint_project_id))
 
     # Team Queries
     teams = MongoengineConnectionField(TeamSchema)
