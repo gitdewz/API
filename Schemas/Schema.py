@@ -16,7 +16,7 @@ from Schemas.TicketSchema import CreateTicket, DeleteTicket, UpdateTicket, Ticke
 from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, UserSchema
 from Schemas.UserTeamSchema import CreateUserTeam, DeleteUserTeam, UpdateUserTeam, UserTeamSchema
 from bson import ObjectId
-from GLOBAL import SPRINT_COLLECTION, PROJECT_COLLECTION
+from GLOBAL import SPRINT_COLLECTION, PROJECT_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION
 from Helpers.CollectionFunctions import CollectionFunctions
 
 
@@ -26,6 +26,18 @@ class SprintProjectJoin(graphene.ObjectType):
     project_name = graphene.String()
     goal = graphene.String()
 
+class TeamMember(graphene.ObjectType):
+    user_id = graphene.ID()
+    email = graphene.String()
+    first_name = graphene.String()
+    last_name = graphene.String()
+
+class UserTeamJoin(graphene.ObjectType):
+    team_id = graphene.ID()
+    team_name = graphene.String()
+    status = graphene.String()
+    team_members = graphene.List(TeamMember)
+    date_created = graphene.DateTime()
 
 class Query(graphene.ObjectType):
     # Project Queries
@@ -136,10 +148,100 @@ class Query(graphene.ObjectType):
     # Team Queries
     teams = MongoengineConnectionField(TeamSchema)
 
-    all_teams = graphene.List(TeamSchema)
+    all_teams = graphene.List(UserTeamJoin)
 
     def resolve_all_teams(self, info):
-        return list(TeamModel.objects().all())
+        cursor = TeamModel.objects.aggregate(*[
+            {
+                "$lookup": {
+                    "from": USER_TEAM_COLLECTION,
+                    "localField": "_id",
+                    "foreignField": "team_id",
+                    "as": "user_team_data"
+                }
+            },
+            {
+                "$lookup": {
+                    "from": USER_COLLECTION,
+                    "localField": "user_team_data.user_id",
+                    "foreignField": "_id",
+                    "as": "team_members"
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "team_id": "$_id",
+                    "team_name": 1,
+                    "status": 1,
+                    "data_created": 1,
+                    "team_members": {
+                        "$map": {
+                            "input": "$team_members",
+                            "as": "team_members",
+                            "in": {
+                                "user_id": "$$team_members._id",
+                                "email": "$$team_members.email",
+                                "first_name": "$$team_members.first_name",
+                                "last_name": "$$team_members.last_name",
+                            }
+                        }
+                    }
+                }
+            },
+        ])
+        teams = []
+        for item in list(cursor):
+            print(item)
+            teams.append(UserTeamJoin(**item))
+        return list(teams)
+
+    team = graphene.Field(UserTeamJoin, team_name=graphene.String())
+
+    def resolve_team(self, info, team_name):
+        cursor = TeamModel.objects.aggregate(*[
+            {
+                "$match": {"team_name": team_name}
+            },
+            {
+                "$lookup": {
+                    "from": USER_TEAM_COLLECTION,
+                    "localField": "_id",
+                    "foreignField": "team_id",
+                    "as": "user_team_data"
+                }
+            },
+            {
+                "$lookup": {
+                    "from": USER_COLLECTION,
+                    "localField": "user_team_data.user_id",
+                    "foreignField": "_id",
+                    "as": "team_members"
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "team_id": "$_id",
+                    "team_name": 1,
+                    "status": 1,
+                    "data_created": 1,
+                    "team_members": {
+                        "$map": {
+                            "input": "$team_members",
+                            "as": "team_members",
+                            "in": {
+                                "user_id": "$$team_members._id",
+                                "email": "$$team_members.email",
+                                "first_name": "$$team_members.first_name",
+                                "last_name": "$$team_members.last_name",
+                            }
+                        }
+                    }
+                }
+            },
+        ])
+        return UserTeamJoin(**list(cursor)[0])
 
     # Ticket Queries
     tickets = MongoengineConnectionField(TicketSchema)
