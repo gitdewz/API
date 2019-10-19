@@ -191,8 +191,6 @@ class Query(graphene.ObjectType):
             },
         ])
         teams = []
-        for item in list(cursor):
-            print(item)
             teams.append(UserTeamJoin(**item))
         return list(teams)
 
