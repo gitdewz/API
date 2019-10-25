@@ -12,6 +12,7 @@ from Schemas.Schema import schema
 from Schemas.LoginSchema import login_schema
 from mongoengine import connect
 from flask_restful import Api
+import json
 from GLOBAL import CLIENT_ENV_KEY, DB_NAME
 # import jwt  # JSON Web Tokens
 
@@ -49,13 +50,13 @@ if __name__ == "__main__":
             token = request.headers.get("AUTHTOKEN", "")
             if collectionFunctions.authenticate(token):
                 return fn(*args, **kwargs)
-            return "not authenticated"
+            return Response(json.dumps({"error": "not authenticated"}), status=405)
         return wrapper
 
     def graphql_view():
         view = GraphQLView.as_view("graphql", schema=schema, graphiql=True)
-        if (application.config["DEV"]):
-            return view
+        # if (application.config["DEV"]):
+        #     return view
         return auth_required(view)
 
     application.add_url_rule("/graphql", view_func=graphql_view(),
