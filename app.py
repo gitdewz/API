@@ -3,7 +3,7 @@ from bson.json_util import dumps
 from flask import abort, Flask, request, Response, session
 from flask_cors import CORS
 from Helpers.CollectionFunctions import CollectionFunctions
-from Login.LoginRequests import LoginRequests
+from Login.LoginRequests import LoginRequests, RegisterRequests
 from Models.Ticket import Ticket as TicketModel
 import os
 import secrets
@@ -35,6 +35,7 @@ if __name__ == "__main__":
     # wsgi_app = application.wsgi_app
 
     api.add_resource(LoginRequests, "/rest/login", "/rest/login/<string:token>")
+    api.add_resource(RegisterRequests, "/rest/register")
 
     def graphql_login():
         # TODO - graphiql should probably be false

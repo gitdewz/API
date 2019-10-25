@@ -38,9 +38,9 @@ class CollectionFunctions:
         collection = self.db[collectionName]
         return collection.find_one(entryFilter, attributeFilter)
 
-    def findUser(self, email, password):
+    def findUser(self, email):
         collection = self.db["User"]
-        return collection.find_one({"email": email, "password": password})
+        return collection.find_one({"email": email})
 
     def validateLogin(self, email, password):
         collection = self.db["User"]

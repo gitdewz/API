@@ -34,7 +34,7 @@ class CreateUser(graphene.Mutation):
         user = UserModel(id=ObjectId(), email=email, password=password,
                          first_name=first_name, last_name=last_name)
         user.save()
-        user_data = collectionFunctions.findUser(email, password)
+        user_data = collectionFunctions.findUser(email)
         # TODO - is random UUID the best? look at other options
         token = uuid.uuid4().hex
         # TODO - why do I have to use _id.. user_id should work
@@ -54,7 +54,7 @@ class LoginUser(graphene.Mutation):
     def mutate(self, info, email, password):
         collectionFunctions = CollectionFunctions()
         password = sha224(password.encode("utf-8")).hexdigest()
-        user = collectionFunctions.findUser(email, password)
+        user = collectionFunctions.findUser(email)
         if user:
             # TODO - is random UUID the best? look at other options
             sessionID = uuid.uuid4().hex
