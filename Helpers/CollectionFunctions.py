@@ -44,7 +44,9 @@ class CollectionFunctions:
 
     def validateLogin(self, email, password):
         collection = self.db["User"]
-        return collection.find({"email": email, "password": password}).count() == 1
+        if collection.find({"email": email, "password": password}).count() == 1:
+            return collection.find_one({"email": email, "password": password})
+        return None
 
     def doesItemExist(self, collectionName, key, value):
         return self.db[collectionName].count({key: value}) > 0
@@ -62,8 +64,10 @@ class CollectionFunctions:
             {"_id": self.findMongoID(item)}, {"$set": vars(item)})
 
     def get_session(self, token):
-        return self.findItem(
-            "session", {"sessionID": token.replace("-", "")}, None)
+        if token:
+            return self.findItem(
+                "session", {"sessionID": token.replace("-", "")}, None)
+        return None
 
     def authenticate(self, token):
         session = self.findItem(

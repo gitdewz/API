@@ -20,18 +20,21 @@ if __name__ == "__main__":
     collectionFunctions = CollectionFunctions()
 
     application = Flask(__name__)
+    # TODO - figure out how to handle cors correctly ... might've changed with graphql
+    CORS(application)
+
     api = Api(application)
+    
+    application.config["CORS_HEADERS"] = "Content-Type"
 
     # TODO - config test/prod environments
     application.config["DEV"] = True
 
-    # TODO - figure out how to handle cors correctly ... might've changed with graphql
-    CORS(application, resources={r"/*": {"origins": "*"}})
 
-    api.add_resource(LoginRequests, "/rest/login/<string:token>")
+    # Make the WSGI interface available at the top level so wfastcgi can get it.	
+    # wsgi_app = application.wsgi_app
 
-    # Make the WSGI interface available at the top level so wfastcgi can get it.
-    # application = app.wsgi_app
+    api.add_resource(LoginRequests, "/rest/login", "/rest/login/<string:token>")
 
     def graphql_login():
         # TODO - graphiql should probably be false
@@ -68,4 +71,8 @@ if __name__ == "__main__":
     except ValueError:
         PORT = 5556
     application.secret_key = os.urandom(12)
+
+    # DEBUG MODE ONLY TO STOP CORS ERRORS #
+    application.config['PROPAGATE_EXCEPTIONS'] = False
+    # DEBUG MODE ONLY TO STOP CORS ERRORS #
     application.run(HOST, PORT, debug=True)
