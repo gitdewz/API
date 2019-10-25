@@ -61,9 +61,11 @@ class CollectionFunctions:
         collection.find_one_and_update(
             {"_id": self.findMongoID(item)}, {"$set": vars(item)})
 
+    def get_session(self, token):
+        return self.findItem(
+            "session", {"sessionID": token.replace("-", "")}, None)
+
     def authenticate(self, token):
-        print(token)
         session = self.findItem(
             "session", {"sessionID": token.replace("-", "")}, None)
-        print(session)
         return session and session["authenticated"]

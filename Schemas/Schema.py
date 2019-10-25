@@ -17,8 +17,6 @@ from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, Us
 from Schemas.UserTeamSchema import CreateUserTeam, DeleteUserTeam, UpdateUserTeam, UserTeamSchema
 from bson import ObjectId
 from GLOBAL import SPRINT_COLLECTION, PROJECT_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION
-from Helpers.CollectionFunctions import CollectionFunctions
-
 
 class SprintProjectJoin(graphene.ObjectType):
     sprint_project_id = graphene.ID()

@@ -3,7 +3,6 @@ from graphene.relay import Node
 from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
 from Models.SprintProject import SprintProject as SprintProjectModel
 from bson import ObjectId
-from Helpers.CollectionFunctions import CollectionFunctions
 
 
 class SprintProjectSchema(MongoengineObjectType):
