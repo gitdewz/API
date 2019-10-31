@@ -152,31 +152,31 @@ def main():
         status_id=status_three_id, status_order=3, status_label="Review", project_id=red_id)
     ticketStatus.save()
     ticketStatus = TicketStatusModel(
-        status_id=status_five_id, status_order=4, status_label="Done", project_id=red_id)
+        status_id=status_four_id, status_order=4, status_label="Done", project_id=red_id)
     ticketStatus.save()
     ticketStatus = TicketStatusModel(
-        status_id=status_six_id, status_order=1, status_label="To Do", project_id=blue_id)
+        status_id=status_five_id, status_order=1, status_label="To Do", project_id=blue_id)
     ticketStatus.save()
     ticketStatus = TicketStatusModel(
-        status_id=status_seven_id, status_order=2, status_label="In Progress", project_id=blue_id)
+        status_id=status_six_id, status_order=2, status_label="In Progress", project_id=blue_id)
     ticketStatus.save()
     ticketStatus = TicketStatusModel(
-        status_id=status_eight_id, status_order=3, status_label="Review", project_id=blue_id)
+        status_id=status_seven_id, status_order=3, status_label="Review", project_id=blue_id)
     ticketStatus.save()
     ticketStatus = TicketStatusModel(
-        status_id=status_nine_id, status_order=4, status_label="Done", project_id=blue_id)
+        status_id=status_eight_id, status_order=4, status_label="Done", project_id=blue_id)
     ticketStatus.save()
     ticketStatus = TicketStatusModel(
-        status_id=status_ten_id, status_order=1, status_label="To Do", project_id=gold_id)
+        status_id=status_nine_id, status_order=1, status_label="To Do", project_id=gold_id)
     ticketStatus.save()
     ticketStatus = TicketStatusModel(
-        status_id=status_eleven_id, status_order=2, status_label="In Progress", project_id=gold_id)
+        status_id=status_ten_id, status_order=2, status_label="In Progress", project_id=gold_id)
     ticketStatus.save()
     ticketStatus = TicketStatusModel(
-        status_id=status_twelve_id, status_order=3, status_label="Review", project_id=gold_id)
+        status_id=status_eleven_id, status_order=3, status_label="Review", project_id=gold_id)
     ticketStatus.save()
     ticketStatus = TicketStatusModel(
-        status_id=status_four_id, status_order=4, status_label="Done", project_id=gold_id)
+        status_id=status_twelve_id, status_order=4, status_label="Done", project_id=gold_id)
     ticketStatus.save()
 
     ticket_descriptions = [
@@ -216,7 +216,9 @@ def main():
         1, 2, 3, 5, 8, 13, 21
     ]
     status_ids = [
-        status_one_id, status_two_id, status_three_id, status_four_id
+        status_one_id, status_two_id, status_three_id, status_four_id,
+        status_five_id, status_six_id, status_seven_id, status_eight_id,
+        status_nine_id, status_ten_id, status_eleven_id, status_twelve_id
     ]
     sprint_project_ids = {
         "AlphaRED": alpha_red_id,
@@ -233,11 +235,14 @@ def main():
         "DeltaGOLD": delta_gold_id,
     }
     for description in ticket_descriptions:
-        project = project_names[random.randint(0, len(project_names)-1)]
+        project_index = random.randint(0, len(project_names)-1)
+        project = project_names[project_index]
         ticket_number = collectionFunctions.findNextId(
             "Ticket", {"project_name": project}, "ticket_number")
         sprint = sprint_names[random.randint(
             0, len(sprint_names)-1)]
+        status_index = (project_index * int(len(status_ids) / len(project_names))) + \
+            random.randint(0, len(project_names))
         ticket = TicketModel(id=ObjectId(), ticket_number=ticket_number, project_name=project,
                              sprint_name=sprint,
                              ticket_type=ticket_types[random.randint(
@@ -247,8 +252,7 @@ def main():
                              story_points=story_points[random.randint(
                                  0, len(story_points)-1)],
                              description=description,
-                             status_id=status_ids[random.randint(
-                                 0, len(status_ids)-1)],
+                             status_id=status_ids[status_index],
                              sprint_project_id=sprint_project_ids[sprint+project]
                              )
         ticket.save()
