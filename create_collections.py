@@ -10,6 +10,7 @@ from Models.User import User as UserModel
 from Models.UserTeam import UserTeam as UserTeamModel
 from Models.Team import Team as TeamModel
 from Models.Ticket import Ticket as TicketModel
+from Models.TicketStatus import TicketStatus as TicketStatusModel
 from bson import ObjectId
 from hashlib import sha224
 from GLOBAL import CLIENT_ENV_KEY, DB_NAME
@@ -117,6 +118,55 @@ def main():
         id=ObjectId(), sprint_id=delta_id, project_id=gold_id, goal="Do some work on the project.")
     sprintProject.save()
 
+    status_one_id = ObjectId()
+    status_two_id = ObjectId()
+    status_three_id = ObjectId()
+    status_four_id = ObjectId()
+    status_five_id = ObjectId()
+    status_six_id = ObjectId()
+    status_seven_id = ObjectId()
+    status_eight_id = ObjectId()
+    status_nine_id = ObjectId()
+    status_ten_id = ObjectId()
+    status_eleven_id = ObjectId()
+    status_twelve_id = ObjectId()
+    ticketStatus = TicketStatusModel(
+        status_id=status_one_id, status_order=1, status_label="To Do", project_id=red_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_two_id, status_order=2, status_label="In Progress", project_id=red_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_three_id, status_order=3, status_label="Review", project_id=red_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_five_id, status_order=4, status_label="Done", project_id=red_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_six_id, status_order=1, status_label="To Do", project_id=blue_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_seven_id, status_order=2, status_label="In Progress", project_id=blue_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_eight_id, status_order=3, status_label="Review", project_id=blue_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_nine_id, status_order=4, status_label="Done", project_id=blue_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_ten_id, status_order=1, status_label="To Do", project_id=gold_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_eleven_id, status_order=2, status_label="In Progress", project_id=gold_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_twelve_id, status_order=3, status_label="Review", project_id=gold_id)
+    ticketStatus.save()
+    ticketStatus = TicketStatusModel(
+        status_id=status_four_id, status_order=4, status_label="Done", project_id=gold_id)
+    ticketStatus.save()
+
     ticket_descriptions = [
         "Do some work in the app and make things talk to other things.",
         "Research that issue we talked about last week and leave notes on the job.",
@@ -153,6 +203,9 @@ def main():
     story_points = [
         1, 2, 3, 5, 8, 13, 21
     ]
+    status_ids = [
+        status_one_id, status_two_id, status_three_id, status_four_id
+    ]
     for description in ticket_descriptions:
         project = project_names[random.randint(0, len(project_names)-1)]
         ticket_number = collectionFunctions.findNextId(
@@ -166,7 +219,10 @@ def main():
                                  0, len(priorities)-1)],
                              story_points=story_points[random.randint(
                                  0, len(story_points)-1)],
-                             description=description)
+                             description=description,
+                             status_id=status_ids[random.randint(
+                                 0, len(status_ids)-1)]
+                             )
         ticket.save()
 
 

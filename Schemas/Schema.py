@@ -6,6 +6,7 @@ from Models.Sprint import Sprint as SprintModel
 from Models.SprintProject import SprintProject as SprintProjectModel
 from Models.Team import Team as TeamModel
 from Models.Ticket import Ticket as TicketModel
+from Models.TicketStatus import TicketStatus as TicketStatusModel
 from Models.User import User as UserModel
 from Models.UserTeam import UserTeam as UserTeamModel
 from Schemas.ProjectSchema import CreateProject, DeleteProject, UpdateProject, ProjectSchema
@@ -13,10 +14,12 @@ from Schemas.SprintSchema import CreateSprint, DeleteSprint, UpdateSprint, Sprin
 from Schemas.SprintProjectSchema import CreateSprintProject, DeleteSprintProject, UpdateSprintProject, SprintProjectSchema
 from Schemas.TeamSchema import CreateTeam, DeleteTeam, UpdateTeam, TeamSchema
 from Schemas.TicketSchema import CreateTicket, DeleteTicket, UpdateTicket, TicketSchema
+from Schemas.TicketStatusSchema import CreateTicketStatus, DeleteTicketStatus, UpdateTicketStatus, TicketStatusSchema
 from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, UserSchema
 from Schemas.UserTeamSchema import CreateUserTeam, DeleteUserTeam, UpdateUserTeam, UserTeamSchema
 from bson import ObjectId
 from GLOBAL import SPRINT_COLLECTION, PROJECT_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION
+
 
 class SprintProjectJoin(graphene.ObjectType):
     sprint_project_id = graphene.ID()
@@ -24,11 +27,13 @@ class SprintProjectJoin(graphene.ObjectType):
     project_name = graphene.String()
     goal = graphene.String()
 
+
 class TeamMember(graphene.ObjectType):
     user_id = graphene.ID()
     email = graphene.String()
     first_name = graphene.String()
     last_name = graphene.String()
+
 
 class UserTeamJoin(graphene.ObjectType):
     team_id = graphene.ID()
@@ -36,6 +41,7 @@ class UserTeamJoin(graphene.ObjectType):
     status = graphene.String()
     team_members = graphene.List(TeamMember)
     date_created = graphene.DateTime()
+
 
 class Query(graphene.ObjectType):
     # Project Queries
@@ -254,6 +260,20 @@ class Query(graphene.ObjectType):
     def resolve_ticket(self, info, project_name, ticket_number):
         return TicketModel.objects.get(project_name__iexact=project_name, ticket_number=ticket_number)
 
+    # TicketStatus Queries
+    ticket_statuses = MongoengineConnectionField(TicketStatusSchema)
+
+    all_ticket_statuses = graphene.List(TicketStatusSchema)
+
+    def resolve_all_ticket_statuses(self, info):
+        return list(TicketStatusModel.objects().all())
+
+    ticket_status = graphene.Field(
+        TicketStatusSchema, status_id=graphene.ID())
+
+    def resolve_ticket_status(self, info, status_id):
+        return TicketStatusModel.objects.get(status_id=status_id)
+
     # User Queries
     # TODO - make a seperate user table without password
     users = MongoengineConnectionField(UserSchema)
@@ -302,6 +322,11 @@ class Mutation(graphene.ObjectType):
     create_ticket = CreateTicket.Field()
     delete_ticket = DeleteTicket.Field()
     update_ticket = UpdateTicket.Field()
+
+    # Ticket Status Mutations
+    create_ticket_status = CreateTicketStatus.Field()
+    delete_ticket_status = DeleteTicketStatus.Field()
+    update_ticket_status = UpdateTicketStatus.Field()
 
     # User Mutations
     create_user = CreateUser.Field()

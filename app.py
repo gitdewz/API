@@ -25,17 +25,17 @@ if __name__ == "__main__":
     CORS(application)
 
     api = Api(application)
-    
+
     application.config["CORS_HEADERS"] = "Content-Type"
 
     # TODO - config test/prod environments
     application.config["DEV"] = True
 
-
-    # Make the WSGI interface available at the top level so wfastcgi can get it.	
+    # Make the WSGI interface available at the top level so wfastcgi can get it.
     # wsgi_app = application.wsgi_app
 
-    api.add_resource(LoginRequests, "/rest/login", "/rest/login/<string:token>")
+    api.add_resource(LoginRequests, "/rest/login",
+                     "/rest/login/<string:token>")
     api.add_resource(RegisterRequests, "/rest/register")
 
     def graphql_login():
@@ -55,12 +55,12 @@ if __name__ == "__main__":
 
     def graphql_view():
         view = GraphQLView.as_view("graphql", schema=schema, graphiql=True)
-        # if (application.config["DEV"]):
-        #     return view
+        if (application.config["DEV"]):
+            return view
         return auth_required(view)
 
     application.add_url_rule("/graphql", view_func=graphql_view(),
-                     methods=["GET", "POST"])
+                             methods=["GET", "POST"])
 
     HOST = os.environ.get("SERVER_HOST", "localhost")
     mongo_client = pymongo.MongoClient(os.environ[CLIENT_ENV_KEY])

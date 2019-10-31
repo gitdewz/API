@@ -1,6 +1,6 @@
 import os
 import pymongo
-from GLOBAL import CLIENT_ENV_KEY, DB_NAME
+from GLOBAL import CLIENT_ENV_KEY, DB_NAME, TICKET_STATUS_COLLECTION, PROJECT_COLLECTION
 
 # TODO
 # 1. Create constants for db / collections
@@ -73,3 +73,9 @@ class CollectionFunctions:
         session = self.findItem(
             "session", {"sessionID": token.replace("-", "")}, None)
         return session and session["authenticated"]
+
+    def get_default_status_id(self, project_name):
+        project_id = self.findItem(
+            PROJECT_COLLECTION, {"project_name": project_name}, None
+        ).project_id
+        return self.db[TICKET_STATUS_COLLECTION].find_one({"project_id": project_id}, sort=["status_order", 0])

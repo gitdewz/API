@@ -15,3 +15,4 @@ class Ticket(Document):
     story_points = IntField()
     description = StringField()
     active_user_id = ObjectIdField()
+    status_id = ObjectIdField()

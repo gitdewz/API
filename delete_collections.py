@@ -4,7 +4,7 @@ import datetime
 import random
 from bson import ObjectId
 from GLOBAL import (CLIENT_ENV_KEY, DB_NAME, PROJECT_COLLECTION, SPRINT_COLLECTION, SPRINT_PROJECT_COLLECTION,
-                    TEAM_COLLECTION, TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION)
+                    TEAM_COLLECTION, TICKET_COLLECTION, TICKET_STATUS_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION)
 from Helpers.CollectionFunctions import CollectionFunctions
 
 
@@ -31,6 +31,9 @@ def main():
 
     sprint_projects = db[SPRINT_PROJECT_COLLECTION]
     sprint_projects.drop()
+
+    ticket_statuses = db[TICKET_STATUS_COLLECTION]
+    ticket_statuses.drop()
 
     tickets = db[TICKET_COLLECTION]
     tickets.drop()
