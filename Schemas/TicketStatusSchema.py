@@ -21,7 +21,7 @@ class CreateTicketStatus(graphene.Mutation):
 
     def mutate(self, info, status_order, status_label, project_id):
         ticket_status = TicketStatusModel(
-            id=ObjectId(), status_order=status_order, ststatus_labelatus=status_label, project_id=project_id)
+            id=ObjectId(), status_order=status_order, status_label=status_label, project_id=project_id)
         ticket_status.save()
         return CreateTicketStatus(ticket_status)
 
