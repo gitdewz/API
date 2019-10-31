@@ -18,7 +18,7 @@ from Schemas.TicketStatusSchema import CreateTicketStatus, DeleteTicketStatus, U
 from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, UserSchema
 from Schemas.UserTeamSchema import CreateUserTeam, DeleteUserTeam, UpdateUserTeam, UserTeamSchema
 from bson import ObjectId
-from GLOBAL import SPRINT_COLLECTION, PROJECT_COLLECTION, TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION
+from GLOBAL import SPRINT_COLLECTION, PROJECT_COLLECTION, TICKET_COLLECTION, TICKET_STATUS_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION
 
 
 class TicketObject(graphene.ObjectType):
@@ -35,11 +35,19 @@ class TicketObject(graphene.ObjectType):
     sprint_project_id = graphene.ID()
 
 
+class TicketStatusObject(graphene.ObjectType):
+    status_id = graphene.ID()
+    status_order = graphene.Int()
+    status_label = graphene.String()
+    project_id = graphene.ID()
+
+
 class SprintProjectJoin(graphene.ObjectType):
     sprint_project_id = graphene.ID()
     sprint_name = graphene.String()
     project_name = graphene.String()
     goal = graphene.String()
+    ticket_statuses = graphene.List(TicketStatusObject)
     tickets = graphene.List(TicketObject)
 
 
@@ -162,11 +170,31 @@ class Query(graphene.ObjectType):
                 }
             },
             {
+                "$lookup": {
+                    "from": TICKET_STATUS_COLLECTION,
+                    "localField": "project_data._id",
+                    "foreignField": "project_id",
+                    "as": "ticket_status_data"
+                }
+            },
+            {
                 "$project": {
                     "_id": 0,
                     "sprint_name": "$sprint_data.sprint_name",
                     "project_name": "$project_data.project_name",
                     "goal": 1,
+                    "ticket_statuses": {
+                        "$map": {
+                            "input": "$ticket_status_data",
+                            "as": "status",
+                            "in": {
+                                "status_id": "$$status._id",
+                                "status_order": "$$status.status_order",
+                                "status_label": "$$status.status_label",
+                                "project_id": "$$status.project_id",
+                            }
+                        }
+                    },
                     "tickets": {
                         "$map": {
                             "input": "$tickets",
