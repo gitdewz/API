@@ -235,6 +235,7 @@ def main():
         "DeltaGOLD": delta_gold_id,
     }
     i = 0
+    count = 1
     while i < 10:
         for description in ticket_descriptions:
             project_index = random.randint(0, len(project_names)-1)
@@ -254,10 +255,12 @@ def main():
                                  story_points=story_points[random.randint(
                                      0, len(story_points)-1)],
                                  description=description,
+                                 title="Ticket " + str(count),
                                  status_id=status_ids[status_index],
                                  sprint_project_id=sprint_project_ids[sprint+project]
                                  )
             ticket.save()
+            count += 1
         i += 1
 
 

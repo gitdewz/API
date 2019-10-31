@@ -29,6 +29,7 @@ class TicketObject(graphene.ObjectType):
     ticket_type = graphene.String()
     priority = graphene.String()
     story_points = graphene.Int()
+    title = graphene.String()
     description = graphene.String()
     active_user_id = graphene.ID()
     status_id = graphene.ID()
@@ -207,6 +208,7 @@ class Query(graphene.ObjectType):
                                 "ticket_type": "$$tickets.ticket_type",
                                 "priority": "$$tickets.priority",
                                 "story_points": "$$tickets.story_points",
+                                "title": "$$tickets.title",
                                 "description": "$$tickets.description",
                                 "active_user_id": "$$tickets.active_user_id",
                                 "status_id": "$$tickets.status_id",

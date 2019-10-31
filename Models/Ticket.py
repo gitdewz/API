@@ -13,6 +13,7 @@ class Ticket(Document):
     ticket_type = StringField()
     priority = StringField()
     story_points = IntField()
+    title = StringField(unique=True)
     description = StringField()
     active_user_id = ObjectIdField()
     status_id = ObjectIdField()
