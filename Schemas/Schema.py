@@ -18,7 +18,21 @@ from Schemas.TicketStatusSchema import CreateTicketStatus, DeleteTicketStatus, U
 from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, UserSchema
 from Schemas.UserTeamSchema import CreateUserTeam, DeleteUserTeam, UpdateUserTeam, UserTeamSchema
 from bson import ObjectId
-from GLOBAL import SPRINT_COLLECTION, PROJECT_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION
+from GLOBAL import SPRINT_COLLECTION, PROJECT_COLLECTION, TICKET_COLLECTION, USER_COLLECTION, USER_TEAM_COLLECTION
+
+
+class TicketObject(graphene.ObjectType):
+    ticket_id = graphene.ID()
+    ticket_number = graphene.Int()
+    project_name = graphene.String()
+    sprint_name = graphene.String()
+    ticket_type = graphene.String()
+    priority = graphene.String()
+    story_points = graphene.Int()
+    description = graphene.String()
+    active_user_id = graphene.ID()
+    status_id = graphene.ID()
+    sprint_project_id = graphene.ID()
 
 
 class SprintProjectJoin(graphene.ObjectType):
@@ -26,6 +40,7 @@ class SprintProjectJoin(graphene.ObjectType):
     sprint_name = graphene.String()
     project_name = graphene.String()
     goal = graphene.String()
+    tickets = graphene.List(TicketObject)
 
 
 class TeamMember(graphene.ObjectType):
@@ -139,11 +154,38 @@ class Query(graphene.ObjectType):
             },
             {"$unwind": "$project_data"},
             {
+                "$lookup": {
+                    "from": TICKET_COLLECTION,
+                    "localField": "_id",
+                    "foreignField": "sprint_project_id",
+                    "as": "tickets"
+                }
+            },
+            {
                 "$project": {
                     "_id": 0,
                     "sprint_name": "$sprint_data.sprint_name",
                     "project_name": "$project_data.project_name",
                     "goal": 1,
+                    "tickets": {
+                        "$map": {
+                            "input": "$tickets",
+                            "as": "tickets",
+                            "in": {
+                                "ticket_id": "$$tickets._id",
+                                "ticket_number": "$$tickets.ticket_number",
+                                "project_name": "$$tickets.project_name",
+                                "sprint_name": "$$tickets.sprint_name",
+                                "ticket_type": "$$tickets.ticket_type",
+                                "priority": "$$tickets.priority",
+                                "story_points": "$$tickets.story_points",
+                                "description": "$$tickets.description",
+                                "active_user_id": "$$tickets.active_user_id",
+                                "status_id": "$$tickets.status_id",
+                                "sprint_project_id": "$$tickets.sprint_project_id",
+                            }
+                        }
+                    }
                 }
             },
         ])

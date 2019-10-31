@@ -16,3 +16,4 @@ class Ticket(Document):
     description = StringField()
     active_user_id = ObjectIdField()
     status_id = ObjectIdField()
+    sprint_project_id = ObjectIdField()

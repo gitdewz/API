@@ -81,41 +81,53 @@ def main():
     )+datetime.timedelta(days=30), date_end=datetime.datetime.now()+datetime.timedelta(days=44))
     sprint.save()
 
+    alpha_red_id = ObjectId()
+    alpha_blue_id = ObjectId()
+    alpha_gold_id = ObjectId()
+    beta_red_id = ObjectId()
+    beta_blue_id = ObjectId()
+    beta_gold_id = ObjectId()
+    gamma_red_id = ObjectId()
+    gamma_blue_id = ObjectId()
+    gamma_gold_id = ObjectId()
+    delta_red_id = ObjectId()
+    delta_blue_id = ObjectId()
+    delta_gold_id = ObjectId()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=alpha_id, project_id=red_id, goal="Do some work on the project.")
+        id=alpha_red_id, sprint_id=alpha_id, project_id=red_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=alpha_id, project_id=blue_id, goal="Do some work on the project.")
+        id=alpha_blue_id, sprint_id=alpha_id, project_id=blue_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=alpha_id, project_id=gold_id, goal="Do some work on the project.")
+        id=alpha_gold_id, sprint_id=alpha_id, project_id=gold_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=beta_id, project_id=red_id, goal="Do some work on the project.")
+        id=beta_red_id, sprint_id=beta_id, project_id=red_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=beta_id, project_id=blue_id, goal="Do some work on the project.")
+        id=beta_blue_id, sprint_id=beta_id, project_id=blue_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=beta_id, project_id=gold_id, goal="Do some work on the project.")
+        id=beta_gold_id, sprint_id=beta_id, project_id=gold_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=gamma_id, project_id=red_id, goal="Do some work on the project.")
+        id=gamma_red_id, sprint_id=gamma_id, project_id=red_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=gamma_id, project_id=blue_id, goal="Do some work on the project.")
+        id=gamma_blue_id, sprint_id=gamma_id, project_id=blue_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=gamma_id, project_id=gold_id, goal="Do some work on the project.")
+        id=gamma_gold_id, sprint_id=gamma_id, project_id=gold_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=delta_id, project_id=red_id, goal="Do some work on the project.")
+        id=delta_red_id, sprint_id=delta_id, project_id=red_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=delta_id, project_id=blue_id, goal="Do some work on the project.")
+        id=delta_blue_id, sprint_id=delta_id, project_id=blue_id, goal="Do some work on the project.")
     sprintProject.save()
     sprintProject = SprintProjectModel(
-        id=ObjectId(), sprint_id=delta_id, project_id=gold_id, goal="Do some work on the project.")
+        id=delta_gold_id, sprint_id=delta_id, project_id=gold_id, goal="Do some work on the project.")
     sprintProject.save()
 
     status_one_id = ObjectId()
@@ -206,13 +218,28 @@ def main():
     status_ids = [
         status_one_id, status_two_id, status_three_id, status_four_id
     ]
+    sprint_project_ids = {
+        "AlphaRED": alpha_red_id,
+        "AlphaBLUE": alpha_blue_id,
+        "AlphaGOLD": alpha_gold_id,
+        "BetaRED": beta_red_id,
+        "BetaBLUE": beta_blue_id,
+        "BetaGOLD": beta_gold_id,
+        "GammaRED": gamma_red_id,
+        "GammaBLUE": gamma_blue_id,
+        "GammaGOLD": gamma_gold_id,
+        "DeltaRED": delta_red_id,
+        "DeltaBLUE": delta_blue_id,
+        "DeltaGOLD": delta_gold_id,
+    }
     for description in ticket_descriptions:
         project = project_names[random.randint(0, len(project_names)-1)]
         ticket_number = collectionFunctions.findNextId(
             "Ticket", {"project_name": project}, "ticket_number")
+        sprint = sprint_names[random.randint(
+            0, len(sprint_names)-1)]
         ticket = TicketModel(id=ObjectId(), ticket_number=ticket_number, project_name=project,
-                             sprint_name=sprint_names[random.randint(
-                                 0, len(sprint_names)-1)],
+                             sprint_name=sprint,
                              ticket_type=ticket_types[random.randint(
                                  0, len(ticket_types)-1)],
                              priority=priorities[random.randint(
@@ -221,7 +248,8 @@ def main():
                                  0, len(story_points)-1)],
                              description=description,
                              status_id=status_ids[random.randint(
-                                 0, len(status_ids)-1)]
+                                 0, len(status_ids)-1)],
+                             sprint_project_id=sprint_project_ids[sprint+project]
                              )
         ticket.save()
 
