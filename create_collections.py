@@ -234,28 +234,31 @@ def main():
         "DeltaBLUE": delta_blue_id,
         "DeltaGOLD": delta_gold_id,
     }
-    for description in ticket_descriptions:
-        project_index = random.randint(0, len(project_names)-1)
-        project = project_names[project_index]
-        ticket_number = collectionFunctions.findNextId(
-            "Ticket", {"project_name": project}, "ticket_number")
-        sprint = sprint_names[random.randint(
-            0, len(sprint_names)-1)]
-        status_index = (project_index * int(len(status_ids) / len(project_names))) + \
-            random.randint(0, len(project_names))
-        ticket = TicketModel(id=ObjectId(), ticket_number=ticket_number, project_name=project,
-                             sprint_name=sprint,
-                             ticket_type=ticket_types[random.randint(
-                                 0, len(ticket_types)-1)],
-                             priority=priorities[random.randint(
-                                 0, len(priorities)-1)],
-                             story_points=story_points[random.randint(
-                                 0, len(story_points)-1)],
-                             description=description,
-                             status_id=status_ids[status_index],
-                             sprint_project_id=sprint_project_ids[sprint+project]
-                             )
-        ticket.save()
+    i = 0
+    while i < 10:
+        for description in ticket_descriptions:
+            project_index = random.randint(0, len(project_names)-1)
+            project = project_names[project_index]
+            ticket_number = collectionFunctions.findNextId(
+                "Ticket", {"project_name": project}, "ticket_number")
+            sprint = sprint_names[random.randint(
+                0, len(sprint_names)-1)]
+            status_index = (project_index * int(len(status_ids) / len(project_names))) + \
+                random.randint(0, len(project_names))
+            ticket = TicketModel(id=ObjectId(), ticket_number=ticket_number, project_name=project,
+                                 sprint_name=sprint,
+                                 ticket_type=ticket_types[random.randint(
+                                     0, len(ticket_types)-1)],
+                                 priority=priorities[random.randint(
+                                     0, len(priorities)-1)],
+                                 story_points=story_points[random.randint(
+                                     0, len(story_points)-1)],
+                                 description=description,
+                                 status_id=status_ids[status_index],
+                                 sprint_project_id=sprint_project_ids[sprint+project]
+                                 )
+            ticket.save()
+        i += 1
 
 
 if __name__ == '__main__':
