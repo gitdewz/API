@@ -13,7 +13,7 @@ from Schemas.ProjectSchema import CreateProject, DeleteProject, UpdateProject, P
 from Schemas.SprintSchema import CreateSprint, DeleteSprint, UpdateSprint, SprintSchema
 from Schemas.SprintProjectSchema import CreateSprintProject, DeleteSprintProject, UpdateSprintProject, SprintProjectSchema
 from Schemas.TeamSchema import CreateTeam, DeleteTeam, UpdateTeam, TeamSchema
-from Schemas.TicketSchema import CreateTicket, DeleteTicket, UpdateTicket, TicketSchema
+from Schemas.TicketSchema import CreateTicket, DeleteTicket, UpdateTicket, UpdateTicketOrder, TicketSchema
 from Schemas.TicketStatusSchema import CreateTicketStatus, DeleteTicketStatus, UpdateTicketStatus, TicketStatusSchema
 from Schemas.UserSchema import CreateUser, DeleteUser, LoginUser, UpdateUser, UserSchema
 from Schemas.UserTeamSchema import CreateUserTeam, DeleteUserTeam, UpdateUserTeam, UserTeamSchema
@@ -34,6 +34,7 @@ class TicketObject(graphene.ObjectType):
     active_user_id = graphene.ID()
     status_id = graphene.ID()
     sprint_project_id = graphene.ID()
+    kanban_index = graphene.Int()
 
 
 class TicketStatusObject(graphene.ObjectType):
@@ -213,6 +214,7 @@ class Query(graphene.ObjectType):
                                 "active_user_id": "$$tickets.active_user_id",
                                 "status_id": "$$tickets.status_id",
                                 "sprint_project_id": "$$tickets.sprint_project_id",
+                                "kanban_index": "$$tickets.kanban_index",
                             }
                         }
                     }
@@ -394,6 +396,7 @@ class Mutation(graphene.ObjectType):
     create_ticket = CreateTicket.Field()
     delete_ticket = DeleteTicket.Field()
     update_ticket = UpdateTicket.Field()
+    update_ticket_order = UpdateTicketOrder.Field()
 
     # Ticket Status Mutations
     create_ticket_status = CreateTicketStatus.Field()

@@ -18,3 +18,4 @@ class Ticket(Document):
     active_user_id = ObjectIdField()
     status_id = ObjectIdField()
     sprint_project_id = ObjectIdField()
+    kanban_index = IntField(default=-1)

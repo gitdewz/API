@@ -29,9 +29,10 @@ class CreateTicket(graphene.Mutation):
         active_user_id = graphene.ID(required=False)
         status_id = graphene.ID(required=False)
         sprint_project_id = graphene.ID(required=False)
+        kanban_index = graphene.Int(required=False)
 
     def mutate(self, info, description=None, title=None, priority=None, sprint_name=None, project_name="NOPROJECT",
-               story_points=None, ticket_type=None, active_user_id=None, status_id=None, sprint_project_id=None):
+               story_points=None, ticket_type=None, active_user_id=None, status_id=None, sprint_project_id=None, kanban_index=-1):
         collectionFunctions = CollectionFunctions()
         if project_name != "NOPROJECT" and not status_id:
             status_id = collectionFunctions.get_default_status_id(project_name)
@@ -49,6 +50,7 @@ class CreateTicket(graphene.Mutation):
         ticket.active_user_id = active_user_id
         ticket.status_id = status_id
         ticket.sprint_project_id = sprint_project_id
+        ticket.kanban_index = kanban_index
         ticket.save()
         return CreateTicket(ticket)
 
@@ -65,6 +67,7 @@ class TicketInput(graphene.InputObjectType):
     active_user_id = graphene.ID(required=False)
     status_id = graphene.ID(required=False)
     sprint_project_id = graphene.ID(required=False)
+    kanban_index = graphene.Int(required=False)
 
 
 class UpdateTicket(graphene.Mutation):
@@ -85,6 +88,29 @@ class UpdateTicket(graphene.Mutation):
             ticket[k] = v
         ticket.update(**dict(changes.items()))
         return UpdateTicket(ticket)
+
+
+class OrderInput(graphene.InputObjectType):
+    class TicketOrder(graphene.InputObjectType):
+        ticket_id = graphene.ID()
+        kanban_index = graphene.Int()
+    ticket_order = graphene.List(TicketOrder)
+
+
+class UpdateTicketOrder(graphene.Mutation):
+    success = graphene.Boolean()
+
+    class Arguments:
+        ticket_order = OrderInput(required=True)
+
+    def mutate(self, info, ticket_order):
+        # TODO:
+        # 1. Can you update all of these at once with update_many or something?
+        for change in ticket_order["ticket_order"]:
+            ticket = TicketModel.objects.get(ticket_id=ObjectId(change.ticket_id))
+            ticket.update(kanban_index=change.kanban_index)
+        success = True
+        return UpdateTicketOrder(success)
 
 
 class DeleteTicket(graphene.Mutation):
