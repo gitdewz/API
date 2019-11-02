@@ -236,7 +236,7 @@ def main():
     }
     i = 0
     count = 1
-    while i < 25:
+    while i < 15:
         for description in ticket_descriptions:
             project_index = random.randint(0, len(project_names)-1)
             project = project_names[project_index]
