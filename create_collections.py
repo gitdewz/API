@@ -261,7 +261,7 @@ def main():
                                  title="Ticket " + str(count),
                                  status_id=status_ids[status_index],
                                  )
-            if not sprint_project_id:
+            if not random.randint(1, 8) == 4:
                 ticket.sprint_project_id = sprint_project_id
             ticket.save()
             count += 1
