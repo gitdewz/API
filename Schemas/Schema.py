@@ -328,6 +328,21 @@ class Query(graphene.ObjectType):
     def resolve_all_tickets(self, info):
         return list(TicketModel.objects().all())
 
+    project_tickets = graphene.List(TicketSchema, project_name=graphene.String())
+
+    def resolve_project_tickets(self, info, project_name):
+        return list(TicketModel.objects(project_name__iexact=project_name))
+
+    sprint_project_tickets = graphene.List(TicketSchema, sprint_project_id=graphene.String())
+
+    def resolve_sprint_project_tickets(self, info, sprint_project_id):
+        return list(TicketModel.objects(sprint_project_id=ObjectId(sprint_project_id)))
+
+    project_backlog_tickets = graphene.List(TicketSchema, project_name=graphene.String())
+
+    def resolve_project_backlog_tickets(self, info, project_name):
+        return list(TicketModel.objects(project_name=project_name, sprint_project_id__exists=False))
+
     ticket = graphene.Field(
         TicketSchema, project_name=graphene.String(), ticket_number=graphene.Int())
 

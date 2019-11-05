@@ -4,7 +4,14 @@ from GLOBAL import TICKET_COLLECTION
 
 
 class Ticket(Document):
-    meta = {"collection": TICKET_COLLECTION}
+    meta = {
+        "collection": TICKET_COLLECTION,
+        "indexes": [
+            {
+                "fields": ["+project_name", "+sprint_name"]
+            }
+        ]
+    }
     ticket_id = ObjectIdField(primary_key=True)
     ticket_number = IntField(unique_with="project_name")
     project_name = StringField(

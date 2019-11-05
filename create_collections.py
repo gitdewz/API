@@ -199,6 +199,7 @@ def main():
         "Research the best way to generate UUIDs.",
         "Create a ProjectSprint collection that links projects and sprints together.",
         "Find a secure way to handle CORS with GraphQL requests.",
+        "Make everything more responsive!"
     ]
     project_names = [
         "RED", "BLUE", "GOLD"
@@ -233,6 +234,7 @@ def main():
         "DeltaRED": delta_red_id,
         "DeltaBLUE": delta_blue_id,
         "DeltaGOLD": delta_gold_id,
+        "Backlog": None,
     }
     i = 0
     count = 1
@@ -246,6 +248,7 @@ def main():
                 0, len(sprint_names)-1)]
             status_index = (project_index * int(len(status_ids) / len(project_names))) + \
                 random.randint(0, len(project_names))
+            sprint_project_id = sprint_project_ids[sprint+project]
             ticket = TicketModel(id=ObjectId(), ticket_number=ticket_number, project_name=project,
                                  sprint_name=sprint,
                                  ticket_type=ticket_types[random.randint(
@@ -257,8 +260,9 @@ def main():
                                  description=description,
                                  title="Ticket " + str(count),
                                  status_id=status_ids[status_index],
-                                 sprint_project_id=sprint_project_ids[sprint+project]
                                  )
+            if not sprint_project_id:
+                ticket.sprint_project_id = sprint_project_id
             ticket.save()
             count += 1
         i += 1
